@@ -1,6 +1,6 @@
 # Neon Trivia VR
 
-A neon-lit holographic trivia game built for WebXR and browser. Test your knowledge across 10 categories with 500 questions, 10 game modes, and a full achievement system — all rendered in immersive 3D spatial UI.
+A neon-lit holographic trivia game built for WebXR and browser. Test your knowledge across 10 categories with 600 questions, 11 game modes, and a full achievement system — all rendered in immersive 3D spatial UI.
 
 **[Play Now](https://ellyz2426.github.io/neon-trivia/)**
 
@@ -9,7 +9,7 @@ A neon-lit holographic trivia game built for WebXR and browser. Test your knowle
 ## Features
 
 ### Trivia Content
-- **500 trivia questions** across 10 categories
+- **600 trivia questions** across 10 categories
 - **10 categories**: Science, History, Geography, Entertainment, Sports, Technology, Nature, Food & Drink, Arts & Culture, General Knowledge
 - **3 difficulty levels**: Easy, Medium, Hard with per-difficulty accuracy tracking
 - **Dynamic difficulty** in Endless mode — auto-scales from easy to hard
@@ -25,10 +25,11 @@ A neon-lit holographic trivia game built for WebXR and browser. Test your knowle
 8. **Practice** — No timer, no pressure
 9. **Challenge** — Head-to-head vs AI opponent with difficulty-based answering probability
 10. **Endless** — 3 lives, no timer, difficulty scales dynamically. Survive as long as you can!
+11. **Survival** — Beat the clock! Start with 30 seconds; correct answers add time, wrong answers subtract. Harder questions reward more time.
 
 ### Progression & Rewards
 - **XP & Leveling** system with combo multipliers
-- **50 achievements** with persistent tracking and golden unlock notifications
+- **60 achievements** with persistent tracking and golden unlock notifications
 - **Top-15 leaderboard** with mode filtering (All / Classic / Challenge / Endless / Speed)
 - **Career stats** dashboard with per-category and per-difficulty accuracy
 - **Game history** tracking (last 20 games)
