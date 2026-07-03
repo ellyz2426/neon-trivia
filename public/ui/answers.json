@@ -157,6 +157,40 @@
               "hoverColor": "#552200"
             },
             "dataUid": "uid-11"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "2X PTS"
+            ],
+            "properties": {
+              "name": "btn-double",
+              "fontSize": "13",
+              "color": "#ff66ff",
+              "backgroundColor": "#330033",
+              "padding": "6",
+              "borderRadius": "4",
+              "hoverColor": "#550055"
+            },
+            "dataUid": "uid-12"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "FREEZE"
+            ],
+            "properties": {
+              "name": "btn-freeze",
+              "fontSize": "13",
+              "color": "#66ccff",
+              "backgroundColor": "#003344",
+              "padding": "6",
+              "borderRadius": "4",
+              "hoverColor": "#005566"
+            },
+            "dataUid": "uid-13"
           }
         ],
         "properties": {
@@ -168,7 +202,7 @@
     ],
     "properties": {
       "width": "560",
-      "height": "200",
+      "height": "240",
       "backgroundColor": "#0a0a2a88",
       "borderRadius": "10",
       "padding": "12",
@@ -186,7 +220,7 @@
         "column": 0
       },
       "end": {
-        "line": 14,
+        "line": 16,
         "column": 8
       }
     },
@@ -256,7 +290,7 @@
         "column": 2
       },
       "end": {
-        "line": 13,
+        "line": 15,
         "column": 14
       }
     },
@@ -288,6 +322,26 @@
       "end": {
         "line": 12,
         "column": 147
+      }
+    },
+    "uid-12": {
+      "start": {
+        "line": 13,
+        "column": 4
+      },
+      "end": {
+        "line": 13,
+        "column": 151
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 14,
+        "column": 4
+      },
+      "end": {
+        "line": 14,
+        "column": 151
       }
     }
   }

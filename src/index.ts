@@ -63,6 +63,8 @@ interface GameStats {
 	level: number;
 	xp: number;
 	categoryGames: number[];
+	categoryCorrect: number[];
+	categoryTotal: number[];
 }
 
 interface LeaderboardEntry {
@@ -80,7 +82,7 @@ interface AchDef {
 
 type GameMode = 'classic' | 'speed' | 'streak' | 'category' | 'daily' | 'blitz' | 'marathon' | 'practice';
 type Difficulty = 'easy' | 'medium' | 'hard';
-type Screen = 'title' | 'modeselect' | 'catpick' | 'difficulty' | 'countdown' | 'playing' | 'pause' | 'gameover' | 'achvlist' | 'stats' | 'settings' | 'leaderboard' | 'help';
+type Screen = 'title' | 'modeselect' | 'catpick' | 'difficulty' | 'countdown' | 'playing' | 'pause' | 'gameover' | 'achvlist' | 'stats' | 'settings' | 'leaderboard' | 'help' | 'review';
 
 interface GameState {
 	mode: GameMode;
@@ -99,6 +101,11 @@ interface GameState {
 	timer: number;
 	maxTimer: number;
 	eliminated: number[];
+	doublePoints: number;
+	timeFrozen: boolean;
+	hasDouble: boolean;
+	hasFreeze: boolean;
+	results: (boolean | undefined)[];
 	gameStartTime: number;
 	elapsedTime: number;
 	xpGained: number;
@@ -563,6 +570,8 @@ const defaultGameState = (): GameState => ({
 	combo: 0, bestCombo: 0, streak: 0, bestStreak: 0,
 	lifelines: { fifty: true, skip: true, hint: true },
 	timer: 30, maxTimer: 30, eliminated: [],
+	doublePoints: 0, timeFrozen: false, hasDouble: true, hasFreeze: true,
+	results: [],
 	gameStartTime: 0, elapsedTime: 0, xpGained: 0,
 });
 
@@ -572,6 +581,7 @@ const defaultStats = (): GameStats => ({
 	gamesPlayed: 0, totalScore: 0, bestScore: 0, correctAnswers: 0, totalAnswers: 0,
 	bestStreak: 0, lifelinesUsed: 0, dailyStreak: 0, lastDailyDate: '',
 	level: 1, xp: 0, categoryGames: new Array(10).fill(0),
+	categoryCorrect: new Array(10).fill(0), categoryTotal: new Array(10).fill(0),
 });
 
 let stats: GameStats = defaultStats();
@@ -598,6 +608,23 @@ let gameElapsed = 0;
 let hudBounceTimer = 0;
 let wrongFlashTimer = 0;
 
+// Review state
+let reviewPage = 0;
+
+// Streak effects
+let streakLevel = 0;
+let defaultParticleColor = 0x00ffff;
+
+// Game history
+interface GameHistoryEntry {
+	mode: string;
+	score: number;
+	correct: number;
+	total: number;
+	date: string;
+}
+let gameHistory: GameHistoryEntry[] = [];
+
 // Scene references
 let particleSpeeds: number[] = [];
 let particleGeo: BufferGeometry | null = null;
@@ -607,6 +634,8 @@ let wireMats: LineBasicMaterial[] = [];
 let sceneLights: PointLight[] = [];
 let floorGrid: GridHelper | null = null;
 let ceilGrid: GridHelper | null = null;
+let sceneRing: Group | null = null;
+let orbitingLights: PointLight[] = [];
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -689,6 +718,17 @@ function saveSettings(): void {
 	try { localStorage.setItem('neon-trivia-settings', JSON.stringify(settingsState)); } catch { /* noop */ }
 }
 
+function loadGameHistory(): void {
+	try {
+		const raw = localStorage.getItem('neon-trivia-history');
+		if (raw) gameHistory = JSON.parse(raw);
+	} catch { /* use defaults */ }
+}
+
+function saveGameHistory(): void {
+	try { localStorage.setItem('neon-trivia-history', JSON.stringify(gameHistory.slice(0, 20))); } catch { /* noop */ }
+}
+
 function xpForLevel(level: number): number { return level * 500; }
 
 function calculateScore(diff: Difficulty, timeLeft: number, combo: number): number {
@@ -696,7 +736,12 @@ function calculateScore(diff: Difficulty, timeLeft: number, combo: number): numb
 	const diffMult = diff === 'easy' ? 1 : diff === 'medium' ? 2 : 3;
 	const speedBonus = Math.max(0, Math.floor(timeLeft * 5));
 	const comboMult = Math.min(combo, 10);
-	return (base * diffMult + speedBonus) * Math.max(1, comboMult);
+	let result = (base * diffMult + speedBonus) * Math.max(1, comboMult);
+	if (gs.doublePoints > 0) {
+		result *= 2;
+		gs.doublePoints--;
+	}
+	return result;
 }
 
 function todayStr(): string {
@@ -799,6 +844,10 @@ function showScreen(screen: Screen): void {
 			break;
 		case 'help':
 			showPanel('help');
+			break;
+		case 'review':
+			showPanel('review');
+			updateReviewUI();
 			break;
 	}
 }
@@ -904,9 +953,20 @@ function showQuestion(): void {
 		hint?.setProperties({ text: gs.lifelines.hint ? 'HINT' : '---' });
 	}
 
+	// Clear time freeze for new question
+	gs.timeFrozen = false;
+
 	// Reset timer for this question
 	if (gs.mode !== 'speed') {
 		gs.timer = gs.maxTimer;
+	}
+
+	// Power-up button state
+	if (da) {
+		const dbl = da.getElementById('btn-double') as UIKit.Text;
+		dbl?.setProperties({ text: gs.hasDouble ? '2X PTS' : '---' });
+		const frz = da.getElementById('btn-freeze') as UIKit.Text;
+		frz?.setProperties({ text: gs.hasFreeze ? 'FREEZE' : '---' });
 	}
 
 	updateHUD();
@@ -920,6 +980,7 @@ function selectAnswer(idx: number): void {
 	const isCorrect = idx === question.correct;
 
 	gs.totalAnswered++;
+	gs.results[gs.currentIndex] = isCorrect;
 
 	// Visual answer feedback — mark correct/wrong on buttons
 	const da = docs['answers'];
@@ -1130,6 +1191,30 @@ function useHint(): void {
 	}
 }
 
+function useDoublePoints(): void {
+	if (!gameRunning || feedbackShowing || !gs.hasDouble) return;
+	gs.hasDouble = false;
+	gs.doublePoints = 3;
+	showToastMsg('DOUBLE POINTS — Next 3 correct = 2x!', 2);
+	const da = docs['answers'];
+	if (da) {
+		const btn = da.getElementById('btn-double') as UIKit.Text;
+		btn?.setProperties({ text: '---' });
+	}
+}
+
+function useTimeFreeze(): void {
+	if (!gameRunning || feedbackShowing || !gs.hasFreeze) return;
+	gs.hasFreeze = false;
+	gs.timeFrozen = true;
+	showToastMsg('TIME FROZEN — Clock paused this question!', 2);
+	const da = docs['answers'];
+	if (da) {
+		const btn = da.getElementById('btn-freeze') as UIKit.Text;
+		btn?.setProperties({ text: '---' });
+	}
+}
+
 function togglePause(): void {
 	if (!gameRunning || feedbackShowing) return;
 	if (currentScreen === 'playing') {
@@ -1246,7 +1331,7 @@ function updateStatsUI(): void {
 	if (!d) return;
 	const accuracy = stats.totalAnswers > 0 ? Math.round((stats.correctAnswers / stats.totalAnswers) * 100) : 0;
 
-	const lines = [
+	const lines: string[] = [
 		`Games Played: ${stats.gamesPlayed}`,
 		`Total Score: ${stats.totalScore}`,
 		`Best Score: ${stats.bestScore}`,
@@ -1258,7 +1343,14 @@ function updateStatsUI(): void {
 		`Daily Streak: ${stats.dailyStreak}`,
 		`Level: ${stats.level} (${stats.xp}/${xpForLevel(stats.level)} XP)`,
 	];
-	for (let i = 0; i < 10; i++) {
+	// Per-category stats
+	for (let c = 0; c < 10; c++) {
+		const total = stats.categoryTotal[c] || 0;
+		const correct = stats.categoryCorrect[c] || 0;
+		const catAcc = total > 0 ? Math.round((correct / total) * 100) : 0;
+		lines.push(`${CATEGORIES[c]}: ${stats.categoryGames[c]} games, ${catAcc}% acc`);
+	}
+	for (let i = 0; i < 20; i++) {
 		const el = d.getElementById(`stat${i}`) as UIKit.Text;
 		el?.setProperties({ text: lines[i] || '' });
 	}
@@ -1286,6 +1378,41 @@ function updateLeaderboardUI(): void {
 			el.setProperties({ text: `#${i + 1}  ---` });
 		}
 	}
+}
+
+function updateReviewUI(): void {
+	const d = docs['review'];
+	if (!d) return;
+
+	const pageSize = 8;
+	// Collect answered question indices
+	const answeredIndices: number[] = [];
+	for (let i = 0; i < gs.questions.length; i++) {
+		if (gs.results[i] !== undefined) {
+			answeredIndices.push(i);
+		}
+	}
+
+	const totalPages = Math.max(1, Math.ceil(answeredIndices.length / pageSize));
+	reviewPage = Math.min(reviewPage, totalPages - 1);
+	const startIdx = reviewPage * pageSize;
+
+	for (let i = 0; i < pageSize; i++) {
+		const el = d.getElementById(`qr${i}`) as UIKit.Text;
+		if (!el) continue;
+		const aIdx = startIdx + i;
+		if (aIdx < answeredIndices.length) {
+			const qi = answeredIndices[aIdx];
+			const q = gs.questions[qi];
+			const icon = gs.results[qi] ? '[OK]' : '[X]';
+			const truncQ = q.question.length > 30 ? q.question.substring(0, 30) + '...' : q.question;
+			el.setProperties({ text: `#${aIdx + 1} ${icon} ${truncQ} -> ${q.answers[q.correct]}` });
+		} else {
+			el.setProperties({ text: '' });
+		}
+	}
+
+	(d.getElementById('lbl-page') as UIKit.Text)?.setProperties({ text: `${reviewPage + 1}/${totalPages}` });
 }
 
 // ============================================================
@@ -1393,8 +1520,8 @@ function setupScene(): void {
 		wireframeGroups.push(g);
 	}
 
-	// Particles (150 pool)
-	const count = 150;
+	// Particles (250 pool)
+	const count = 250;
 	const positions = new Float32Array(count * 3);
 	particleSpeeds = [];
 	for (let i = 0; i < count; i++) {
@@ -1571,6 +1698,10 @@ class TriviaSystem extends createSystem({
 			(doc.getElementById('btn-rematch') as UIKit.Text)?.setProperties({ onClick: () => {
 				startGame(gs.mode, gs.difficulty, gs.category);
 			} });
+			(doc.getElementById('btn-review') as UIKit.Text)?.setProperties({ onClick: () => {
+				reviewPage = 0;
+				showScreen('review');
+			} });
 			(doc.getElementById('btn-menu') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
 		});
 
@@ -1720,6 +1851,7 @@ class TriviaSystem extends createSystem({
 					gs.timer = 0;
 					// Time ran out for this question — treat as wrong
 					gs.totalAnswered++;
+					gs.results[gs.currentIndex] = false;
 					gs.combo = 0;
 					gs.streak = 0;
 					const question = gs.questions[gs.currentIndex];
@@ -1741,10 +1873,13 @@ class TriviaSystem extends createSystem({
 			if (kb.getKeyDown('KeyF')) useFiftyFifty();
 			if (kb.getKeyDown('KeyS')) useSkip();
 			if (kb.getKeyDown('KeyH')) useHint();
+			if (kb.getKeyDown('KeyD')) useDoublePoints();
+			if (kb.getKeyDown('KeyT')) useTimeFreeze();
 			if (kb.getKeyDown('Escape') || kb.getKeyDown('KeyP')) togglePause();
 
 			const rightPad = this.world.input.xr.gamepads.right;
 			if (rightPad?.getButtonDown(InputComponent.B_Button)) togglePause();
+			if (rightPad?.getButtonDown(InputComponent.A_Button)) useDoublePoints();
 		}
 
 		// ---- HUD bounce recovery ----
@@ -1786,11 +1921,77 @@ class TriviaSystem extends createSystem({
 		}
 
 		// ---- Animate wireframes ----
+		const wireSpeedMult = streakLevel === 2 ? 3 : streakLevel === 1 ? 2 : 1;
 		for (let i = 0; i < wireframeGroups.length; i++) {
 			const g = wireframeGroups[i];
-			g.rotation.x += (0.15 + i * 0.02) * delta;
-			g.rotation.y += (0.2 + i * 0.03) * delta;
+			g.rotation.x += (0.15 + i * 0.02) * delta * wireSpeedMult;
+			g.rotation.y += (0.2 + i * 0.03) * delta * wireSpeedMult;
 			g.position.y += Math.sin(time + i * 1.5) * 0.002;
+		}
+
+		// ---- Animate ring ----
+		if (sceneRing) {
+			const ringSpeedMult = streakLevel === 2 ? 3 : streakLevel === 1 ? 2 : 1;
+			sceneRing.rotation.y += 0.15 * delta * ringSpeedMult;
+			sceneRing.rotation.x += 0.05 * delta * ringSpeedMult;
+		}
+
+		// ---- Animate orbiting lights ----
+		for (let i = 0; i < orbitingLights.length; i++) {
+			const angle = time * 0.5 + (i / 4) * Math.PI * 2;
+			const radius = 3.5;
+			orbitingLights[i].position.set(
+				Math.cos(angle) * radius,
+				2 + Math.sin(time * 0.7 + i * 1.2) * 1.5,
+				Math.sin(angle) * radius - 2,
+			);
+		}
+
+		// ---- Streak visual effects ----
+		const newStreakLevel = gs.streak >= 10 ? 2 : gs.streak >= 5 ? 1 : 0;
+		if (newStreakLevel !== streakLevel) {
+			streakLevel = newStreakLevel;
+			if (streakLevel === 2) {
+				showToastMsg('UNSTOPPABLE!', 2);
+				if (particleMat) {
+					particleMat.color.setHex(0xffcc00);
+					particleMat.opacity = 0.9;
+				}
+				// Move some particles closer for spark effect
+				if (particleGeo) {
+					const pos = particleGeo.getAttribute('position');
+					if (pos) {
+						for (let pi = 0; pi < 30; pi++) {
+							(pos as any).setX(pi, (Math.random() - 0.5) * 6);
+							(pos as any).setZ(pi, (Math.random() - 0.5) * 6 - 2);
+						}
+						(pos as any).needsUpdate = true;
+					}
+				}
+			} else if (streakLevel === 1) {
+				showToastMsg('ON FIRE!', 2);
+				if (particleMat) {
+					particleMat.opacity = 0.9;
+					particleMat.color.setHex(defaultParticleColor);
+				}
+			} else {
+				// Reset to defaults
+				if (particleMat) {
+					particleMat.opacity = 0.6;
+					particleMat.color.setHex(defaultParticleColor);
+				}
+				// Reset particle positions
+				if (particleGeo) {
+					const pos = particleGeo.getAttribute('position');
+					if (pos) {
+						for (let pi = 0; pi < 30; pi++) {
+							(pos as any).setX(pi, (Math.random() - 0.5) * 30);
+							(pos as any).setZ(pi, (Math.random() - 0.5) * 30);
+						}
+						(pos as any).needsUpdate = true;
+					}
+				}
+			}
 		}
 	}
 }
@@ -1805,6 +2006,7 @@ async function main() {
 	loadLeaderboard();
 	loadAchievements();
 	loadSettings();
+	loadGameHistory();
 
 	// Create World
 	const container = document.getElementById('app') as HTMLDivElement;
