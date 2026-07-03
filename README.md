@@ -1,55 +1,104 @@
-# 🧠 Neon Trivia VR
+# Neon Trivia VR
 
-A holographic quiz show game built with [IWSDK](https://iwsdk.dev) for VR and browser. Test your knowledge across 10 categories in a neon-lit VR holodeck.
+A neon-lit holographic trivia game built for WebXR and browser. Test your knowledge across 10 categories with 500 questions, 10 game modes, and a full achievement system — all rendered in immersive 3D spatial UI.
 
 **[Play Now](https://ellyz2426.github.io/neon-trivia/)**
 
-## Game Modes
-
-1. **Classic** — 15 questions, timed per-question
-2. **Speed** — 60-second countdown, answer as many as possible
-3. **Streak** — No timer, game ends on wrong answer
-4. **Category** — Pick one of 10 categories, 15 questions
-5. **Daily** — Date-seeded challenge, one attempt per day
-6. **Blitz** — 10 rapid-fire questions
-7. **Marathon** — All 210 questions
-8. **Practice** — No timer, no scoring
+---
 
 ## Features
 
-- **210 trivia questions** — 21 per category × 10 categories (Science, History, Technology, Geography, Entertainment, Sports, Art & Literature, Music, Nature, Food & Drink)
-- **3 difficulty levels** — Easy, Medium, Hard
-- **3 lifelines** — 50:50, Skip, Hint
-- **40 achievements** with persistent unlock tracking
-- **Top 10 leaderboard** per session
-- **6 neon themes** — Cyber Blue, Plasma Purple, Neon Green, Solar Gold, Ruby Red, Arctic White
-- **XP & leveling** with combo multipliers (x1–x10)
-- **Holographic 3D environment** — animated wireframe shapes, particle effects, dynamic fog, floor/ceiling neon grids
-- **Spatial UI** — 16 UIKitML panels (zero HTML DOM in-game)
-- **localStorage persistence** — stats, leaderboard, achievements, settings
+### Trivia Content
+- **500 trivia questions** across 10 categories
+- **10 categories**: Science, History, Geography, Entertainment, Sports, Technology, Nature, Food & Drink, Arts & Culture, General Knowledge
+- **3 difficulty levels**: Easy, Medium, Hard with per-difficulty accuracy tracking
+- **Dynamic difficulty** in Endless mode — auto-scales from easy to hard
 
-## Controls
+### Game Modes
+1. **Classic** — 20 questions, standard rules
+2. **Speed** — 60-second timer, answer as many as you can
+3. **Streak** — One wrong answer ends the game
+4. **Category** — Pick a category, 20 questions deep
+5. **Daily Challenge** — Same questions globally each day (seeded PRNG)
+6. **Blitz** — 10 seconds per question
+7. **Marathon** — 50 questions, endurance test
+8. **Practice** — No timer, no pressure
+9. **Challenge** — Head-to-head vs AI opponent with difficulty-based answering probability
+10. **Endless** — 3 lives, no timer, difficulty scales dynamically. Survive as long as you can!
 
-All interaction via VR gaze/pointer or mouse — select answer panels, navigate menus, and use lifelines with spatial UI buttons.
+### Progression & Rewards
+- **XP & Leveling** system with combo multipliers
+- **40 achievements** with persistent tracking and golden unlock notifications
+- **Top-15 leaderboard** with mode filtering (All / Classic / Challenge)
+- **Career stats** dashboard with per-category and per-difficulty accuracy
+- **Game history** tracking (last 20 games)
+- **Daily streak** tracking
 
-## Tech
+### Gameplay Features
+- **3 lifelines**: 50:50, Skip, Hint
+- **2 power-ups**: Double Points (2x), Time Freeze
+- **Combo scoring** with multipliers up to x10
+- **Streak visual effects**: "ON FIRE" at 5+, "UNSTOPPABLE" at 10+ with golden particles
+- **Post-game review** with scrollable question results and pagination
+- **6 neon themes**: Holodeck, Crimson, Toxic, Ultraviolet, Solar, Arctic
 
-- **IWSDK v0.4.2** — Meta's Immersive Web SDK (WebXR)
-- **Three.js r185** — 3D rendering
-- **EliCS v3.4.2** — Entity Component System
-- **16 UIKitML panels** — Compiled spatial UI
-- **~1,660 lines TypeScript** — Single-file game
-- **Vite** — Build tooling
+### Visual & Audio
+- **3D holodeck environment** with wireframe decorations, particle effects, fog, and neon grids
+- **Animated torus ring** with dynamic rotation
+- **4 orbiting point lights** with varying heights
+- **250 atmospheric particles** with additive blending
+- **Holographic panel float** — subtle sine-wave oscillation on menu panels
+- **Achievement notification overlays** with golden styling
+- **Trail particle effects** on combo streaks
+- **XR controller haptic feedback** for correct/wrong/milestone events
+- **HUD bounce** on correct answers, red flash on wrong
 
-## Development
+## How to Play
+
+### Browser Controls
+| Key | Action |
+|-----|--------|
+| `1-4` | Select answer A-D |
+| `F` | Use 50:50 lifeline |
+| `S` | Skip question |
+| `H` | Use hint |
+| `D` | Activate Double Points |
+| `T` | Activate Time Freeze |
+| `Esc` / `P` | Pause game |
+
+### VR Controls
+| Input | Action |
+|-------|--------|
+| Laser pointer | Select UI buttons |
+| `A` button | Activate Double Points |
+| `B` button | Pause game |
+
+## Tech Stack
+
+- **IWSDK** 0.4.x — Immersive Web SDK (Meta's WebXR framework)
+- **TypeScript** — Fully typed, zero `as any` casts
+- **PanelUI / UIKitML** — All 19 spatial UI panels, zero HTML DOM overlays
+- **Vite** — Build tooling with UIKitML plugin
+- **localStorage** — Persistent stats, achievements, leaderboard, settings
+
+## Build & Run
 
 ```bash
+# Install dependencies
 npm install
-npx iwsdk dev up     # Start dev server
-npx iwsdk dev down   # Stop dev server
-npm run build        # Production build → dist/
+
+# Start dev server
+npx vite --host
+
+# Type check
+npx tsc --noEmit
+
+# Production build
+npm run build
 ```
 
-## Build Info
+## Credits
+
+Built with IWSDK (Immersive Web SDK) by Meta's WebXR team. Designed for dual runtime — works in both standard browsers and WebXR headsets.
 
 IWSDK Daily Build #86 — 2026-07-03

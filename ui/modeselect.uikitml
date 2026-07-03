@@ -1,4 +1,4 @@
-<panel width="420" height="560" background-color="#0a0a2a" border-radius="12" padding="16" gap="6" flex-direction="column" align-items="center">
+<panel width="420" height="620" background-color="#0a0a2a" border-radius="12" padding="16" gap="6" flex-direction="column" align-items="center">
   <text font-size="24" color="#00ffff" font-weight="bold">SELECT MODE</text>
   <container height="2"></container>
   <text name="btn-classic" font-size="17" color="#00ffff" background-color="#003355" padding="7" border-radius="6" width="280" text-align="center" hover-color="#005588">CLASSIC (20 Q)</text>
@@ -10,5 +10,6 @@
   <text name="btn-marathon" font-size="17" color="#66ccff" background-color="#002244" padding="7" border-radius="6" width="280" text-align="center" hover-color="#004466">MARATHON (50 Q)</text>
   <text name="btn-practice" font-size="17" color="#888888" background-color="#222222" padding="7" border-radius="6" width="280" text-align="center" hover-color="#444444">PRACTICE</text>
   <text name="btn-challenge" font-size="17" color="#ff4466" background-color="#440022" padding="7" border-radius="6" width="280" text-align="center" hover-color="#660033">CHALLENGE (vs AI)</text>
+  <text name="btn-endless" font-size="17" color="#44ffaa" background-color="#003322" padding="7" border-radius="6" width="280" text-align="center" hover-color="#005544">ENDLESS (3 Lives)</text>
   <text name="btn-back" font-size="16" color="#ff4444" background-color="#330000" padding="6" border-radius="6" width="140" text-align="center" hover-color="#550000">BACK</text>
 </panel>

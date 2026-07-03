@@ -86,7 +86,7 @@ interface AchDef {
 	check: (s: GameStats, g: GameState) => boolean;
 }
 
-type GameMode = 'classic' | 'speed' | 'streak' | 'category' | 'daily' | 'blitz' | 'marathon' | 'practice' | 'challenge';
+type GameMode = 'classic' | 'speed' | 'streak' | 'category' | 'daily' | 'blitz' | 'marathon' | 'practice' | 'challenge' | 'endless';
 type Difficulty = 'easy' | 'medium' | 'hard';
 type Screen = 'title' | 'modeselect' | 'catpick' | 'difficulty' | 'countdown' | 'playing' | 'pause' | 'gameover' | 'achvlist' | 'stats' | 'settings' | 'leaderboard' | 'help' | 'review';
 
@@ -117,6 +117,8 @@ interface GameState {
 	xpGained: number;
 	aiScore: number;
 	aiCorrect: number;
+	lives: number;
+	dynamicDifficulty: Difficulty;
 }
 
 // ============================================================
@@ -140,6 +142,7 @@ const THEMES = [
 const MODE_QUESTION_COUNT: Record<GameMode, number> = {
 	classic: 20, speed: 999, streak: 999, category: 20,
 	daily: 20, blitz: 999, marathon: 50, practice: 20, challenge: 20,
+	endless: 99999,
 };
 
 const DIFF_TIMERS: Record<Difficulty, number> = { easy: 30, medium: 20, hard: 15 };
@@ -162,6 +165,7 @@ const PANEL_CONFIGS: Record<string, { config: string; y: number; z: number }> = 
 	toast: { config: './ui/toast.json', y: 0.45, z: -1.0 },
 	help: { config: './ui/help.json', y: 0.1, z: -1.5 },
 	review: { config: './ui/review.json', y: 0.1, z: -1.5 },
+	achvnotify: { config: './ui/achvnotify.json', y: -0.25, z: -1.0 },
 };
 
 // ============================================================
@@ -518,6 +522,130 @@ const QUESTIONS: TriviaQuestion[] = [
 	qb(9,'hard','What logical fallacy assumes a chain of events from one action?',['Slippery slope','Ad hominem','Straw man','False dilemma'],0,'If A then B then C then catastrophe'),
 
 	// ============================================================
+	// ROUND 5 QUESTIONS — 100 additional (10 per category, total 500)
+	// ============================================================
+
+	// ---- 0: Science (10 more) ----
+	qb(0,'easy','What is the main gas in the Sun?',['Hydrogen','Helium','Oxygen','Nitrogen'],0,'Lightest element, powers fusion'),
+	qb(0,'easy','What vitamin do oranges provide?',['Vitamin C','Vitamin A','Vitamin K','Vitamin E'],0,'Fights scurvy'),
+	qb(0,'medium','What is the smallest unit of matter?',['Atom','Molecule','Cell','Electron'],0,'From Greek meaning indivisible'),
+	qb(0,'medium','What phenomenon makes the sky blue?',['Rayleigh scattering','Reflection','Refraction','Diffraction'],0,'Shorter wavelengths scatter more'),
+	qb(0,'hard','What is a quasar?',['Active galactic nucleus','A type of star','A nebula','A comet'],0,'Extremely luminous, powered by supermassive black holes'),
+	qb(0,'easy','What planet is known for the Great Red Spot?',['Jupiter','Mars','Saturn','Neptune'],0,'Largest planet, a giant storm'),
+	qb(0,'medium','What is the pH of pure water?',['7','0','14','5'],0,'Neutral on the pH scale'),
+	qb(0,'hard','What is the Heisenberg Uncertainty Principle?',['Cannot know both position and momentum precisely','Energy is quantized','Light is a wave','Atoms are indivisible'],0,'Fundamental limit of quantum measurement'),
+	qb(0,'medium','What part of the brain controls balance?',['Cerebellum','Cerebrum','Brainstem','Hypothalamus'],0,'Located at the back of the head'),
+	qb(0,'hard','What force holds atomic nuclei together?',['Strong nuclear force','Gravity','Electromagnetic force','Weak nuclear force'],0,'Strongest of the four fundamental forces'),
+
+	// ---- 1: History (10 more) ----
+	qb(1,'easy','Who was known as the Iron Lady?',['Margaret Thatcher','Queen Victoria','Angela Merkel','Indira Gandhi'],0,'UK Prime Minister 1979-1990'),
+	qb(1,'easy','What country gave the Statue of Liberty to the US?',['France','England','Germany','Italy'],0,'Gifted in 1886'),
+	qb(1,'medium','Who led the Soviet Union during WWII?',['Joseph Stalin','Vladimir Lenin','Nikita Khrushchev','Leon Trotsky'],0,'Led from 1924 to 1953'),
+	qb(1,'medium','Which ancient Greek city-state was known for warriors?',['Sparta','Athens','Corinth','Thebes'],0,'Battle of Thermopylae'),
+	qb(1,'hard','What year was the Magna Carta signed?',['1215','1066','1492','1776'],0,'Runnymede, King John'),
+	qb(1,'easy','Who painted the ceiling of the Sistine Chapel?',['Michelangelo','Raphael','Leonardo','Botticelli'],0,'Took about four years'),
+	qb(1,'medium','What was the Manhattan Project?',['Nuclear weapons program','Urban planning project','Bridge construction','Space program'],0,'Led to the atomic bomb'),
+	qb(1,'hard','Who was Hannibal Barca?',['Carthaginian general','Roman emperor','Greek philosopher','Egyptian pharaoh'],0,'Crossed the Alps with elephants'),
+	qb(1,'medium','What event triggered World War I?',['Assassination of Archduke Franz Ferdinand','Sinking of the Lusitania','Invasion of Poland','Treaty of Versailles'],0,'In Sarajevo, 1914'),
+	qb(1,'hard','What dynasty built the Forbidden City?',['Ming','Qing','Tang','Song'],0,'In Beijing, started 1406'),
+
+	// ---- 2: Geography (10 more) ----
+	qb(2,'easy','What is the smallest continent?',['Australia','Europe','Antarctica','South America'],0,'Also a country'),
+	qb(2,'easy','Capital of Italy?',['Rome','Milan','Venice','Florence'],0,'Home of the Colosseum'),
+	qb(2,'medium','What is the longest river in Europe?',['Volga','Danube','Rhine','Loire'],0,'Flows through Russia'),
+	qb(2,'medium','Which desert is the largest cold desert?',['Antarctica','Gobi','Patagonian','Great Basin'],0,'A frozen continent'),
+	qb(2,'hard','What is the Ring of Fire?',['Pacific volcanic belt','A boxing term','A crater on Mars','A constellation'],0,'Home to 75 percent of active volcanoes'),
+	qb(2,'easy','What country has the shape of a boot?',['Italy','Chile','Norway','New Zealand'],0,'Mediterranean peninsula'),
+	qb(2,'medium','Which African river creates Victoria Falls?',['Zambezi','Nile','Congo','Niger'],0,'Border of Zambia and Zimbabwe'),
+	qb(2,'hard','What is the most densely populated country?',['Monaco','Singapore','Bangladesh','Malta'],0,'About 26,000 people per sq km'),
+	qb(2,'medium','Capital of Brazil?',['Brasilia','Rio de Janeiro','Sao Paulo','Salvador'],0,'Planned city, built in 1960'),
+	qb(2,'hard','What is the deepest lake in the world?',['Lake Baikal','Lake Tanganyika','Caspian Sea','Lake Superior'],0,'In Siberia, 1,642 meters deep'),
+
+	// ---- 3: Entertainment (10 more) ----
+	qb(3,'easy','What is the name of SpongeBob\'s best friend?',['Patrick Star','Squidward','Sandy Cheeks','Gary'],0,'A pink starfish'),
+	qb(3,'easy','Who played Captain Jack Sparrow?',['Johnny Depp','Orlando Bloom','Brad Pitt','Robert Downey Jr.'],0,'Pirates of the Caribbean'),
+	qb(3,'medium','What is the best-selling video game of all time?',['Minecraft','Tetris','GTA V','Wii Sports'],0,'Block building sandbox'),
+	qb(3,'medium','Who directed Inception?',['Christopher Nolan','Steven Spielberg','James Cameron','Denis Villeneuve'],0,'Also directed The Dark Knight'),
+	qb(3,'hard','What TV show has the most Emmy Awards?',['Game of Thrones','Saturday Night Live','Frasier','The Simpsons'],0,'HBO fantasy epic'),
+	qb(3,'easy','What Disney princess has ice powers?',['Elsa','Anna','Rapunzel','Moana'],0,'Let it go'),
+	qb(3,'medium','Which band performed Stairway to Heaven?',['Led Zeppelin','Pink Floyd','The Rolling Stones','The Who'],0,'Classic rock, 1971'),
+	qb(3,'hard','What was the first full-length CGI animated feature?',['Toy Story','Shrek','A Bug\'s Life','Finding Nemo'],0,'Pixar, 1995'),
+	qb(3,'medium','Who wrote Pride and Prejudice?',['Jane Austen','Charlotte Bronte','Emily Dickinson','Virginia Woolf'],0,'Published 1813'),
+	qb(3,'hard','What country produces the most films per year?',['India','United States','China','Nigeria'],0,'Bollywood and regional cinema'),
+
+	// ---- 4: Sports (10 more) ----
+	qb(4,'easy','What sport does Serena Williams play?',['Tennis','Golf','Basketball','Soccer'],0,'23 Grand Slam titles'),
+	qb(4,'easy','How many quarters are in an NBA game?',['4','2','3','6'],0,'12 minutes each'),
+	qb(4,'medium','What is the national sport of Canada?',['Lacrosse','Ice hockey','Curling','Basketball'],0,'Summer national sport'),
+	qb(4,'medium','How many points is a 3-point shot in basketball?',['3','2','4','1'],0,'Beyond the arc'),
+	qb(4,'hard','What distance is a marathon in kilometers?',['42.195','40','45','38'],0,'Based on the legend of Pheidippides'),
+	qb(4,'easy','What sport is played at the Super Bowl?',['American football','Baseball','Basketball','Soccer'],0,'NFL championship'),
+	qb(4,'medium','Which athlete has won the most Olympic medals total?',['Michael Phelps','Larisa Latynina','Paavo Nurmi','Mark Spitz'],0,'28 total medals'),
+	qb(4,'hard','In what year was the first FIFA World Cup held?',['1930','1926','1934','1950'],0,'Held in Uruguay'),
+	qb(4,'medium','What is a hat trick in soccer?',['3 goals by one player','3 assists','3 saves','3 fouls'],0,'Originally from cricket'),
+	qb(4,'hard','Which country invented table tennis?',['England','China','Japan','Germany'],0,'Victorian era parlor game'),
+
+	// ---- 5: Technology (10 more) ----
+	qb(5,'easy','What does GPS stand for?',['Global Positioning System','General Purpose System','Global Programming Standard','Graphic Processing System'],0,'Satellite navigation'),
+	qb(5,'easy','Who founded Amazon?',['Jeff Bezos','Elon Musk','Bill Gates','Mark Zuckerberg'],0,'Started as an online bookstore'),
+	qb(5,'medium','What year was Facebook founded?',['2004','2003','2006','2008'],0,'At Harvard University'),
+	qb(5,'medium','What does API stand for?',['Application Programming Interface','Advanced Program Integration','Application Process Instruction','Automated Programming Interface'],0,'How software systems communicate'),
+	qb(5,'hard','What is Moore\'s Law doubling period?',['About 2 years','1 year','5 years','10 years'],0,'Transistor density observation'),
+	qb(5,'easy','What company created Windows?',['Microsoft','Apple','Google','IBM'],0,'Founded by Bill Gates'),
+	qb(5,'medium','What does VPN stand for?',['Virtual Private Network','Visual Processing Node','Verified Personal Network','Virtual Processing Network'],0,'Encrypts internet traffic'),
+	qb(5,'hard','Who invented the World Wide Web?',['Tim Berners-Lee','Vint Cerf','Steve Jobs','Bill Gates'],0,'At CERN in 1989'),
+	qb(5,'medium','What programming language is named after a gemstone?',['Ruby','Pearl','Crystal','Jade'],0,'Created by Yukihiro Matsumoto'),
+	qb(5,'hard','What was the first computer to beat a world chess champion?',['Deep Blue','Watson','AlphaGo','Stockfish'],0,'IBM, defeated Kasparov 1997'),
+
+	// ---- 6: Nature (10 more) ----
+	qb(6,'easy','What is a baby cow called?',['Calf','Foal','Lamb','Kid'],0,'Grows up to be cattle'),
+	qb(6,'easy','How many stomachs does a cow have?',['4','2','3','1'],0,'For digesting tough plant material'),
+	qb(6,'medium','What is the fastest marine animal?',['Sailfish','Swordfish','Marlin','Tuna'],0,'Can reach 68 mph'),
+	qb(6,'medium','What animal can regenerate lost limbs?',['Axolotl','Frog','Snake','Turtle'],0,'Mexican walking fish'),
+	qb(6,'hard','What is the largest species of shark?',['Whale shark','Great white','Basking shark','Hammerhead'],0,'Filter feeder, up to 40 feet'),
+	qb(6,'easy','What is the tallest land animal?',['Giraffe','Elephant','Ostrich','Moose'],0,'Long neck for reaching leaves'),
+	qb(6,'medium','What type of animal is a seahorse?',['Fish','Mammal','Reptile','Crustacean'],0,'Males carry the young'),
+	qb(6,'hard','What is the world\'s largest flower by bloom size?',['Rafflesia arnoldii','Titan arum','Sunflower','Victoria amazonica'],0,'Up to 3 feet across, smells like rotting flesh'),
+	qb(6,'medium','Which bird is known for mimicking human speech?',['Parrot','Crow','Mynah','Mockingbird'],0,'African Grey is especially talented'),
+	qb(6,'hard','What phenomenon describes mass coral death?',['Coral bleaching','Coral erosion','Coral migration','Coral dormancy'],0,'Caused by rising ocean temperatures'),
+
+	// ---- 7: Food & Drink (10 more) ----
+	qb(7,'easy','What is tofu made from?',['Soybeans','Rice','Wheat','Corn'],0,'Coagulated soy milk'),
+	qb(7,'easy','Which fruit is known as the king of fruits?',['Durian','Mango','Jackfruit','Pineapple'],0,'Strong smell, Southeast Asian'),
+	qb(7,'medium','What is the main ingredient in hummus?',['Chickpeas','Lentils','Kidney beans','Black beans'],0,'Middle Eastern dip with tahini'),
+	qb(7,'medium','Which country invented croissants?',['Austria','France','Italy','Belgium'],0,'Originally called kipferl'),
+	qb(7,'hard','What is the main flavor compound in vanilla?',['Vanillin','Capsaicin','Menthol','Limonene'],0,'Can be synthetically produced'),
+	qb(7,'easy','What is the most popular fruit in the world?',['Banana','Apple','Orange','Grape'],0,'Curved yellow fruit'),
+	qb(7,'medium','What type of pasta is shaped like little ears?',['Orecchiette','Farfalle','Penne','Fusilli'],0,'From Puglia, southern Italy'),
+	qb(7,'hard','What is the difference between jam and jelly?',['Jam has fruit pieces, jelly is smooth','They are identical','Jam is cooked longer','Jelly has seeds'],0,'Texture and fruit content differ'),
+	qb(7,'medium','Which spice is the most expensive by weight?',['Saffron','Vanilla','Cardamom','Cinnamon'],0,'Harvested from crocus flowers'),
+	qb(7,'hard','What fermentation produces sourdough bread?',['Wild yeast and lactobacilli','Commercial yeast only','Baking soda reaction','Vinegar fermentation'],0,'Natural starter culture'),
+
+	// ---- 8: Arts & Culture (10 more) ----
+	qb(8,'easy','What instrument does a cellist play?',['Cello','Viola','Bass','Violin'],0,'Held between the knees'),
+	qb(8,'easy','Who painted The Scream?',['Edvard Munch','Vincent van Gogh','Pablo Picasso','Salvador Dali'],0,'Norwegian Expressionist, 1893'),
+	qb(8,'medium','What Japanese art repairs broken pottery with gold?',['Kintsugi','Ikebana','Origami','Raku'],0,'Embracing imperfection'),
+	qb(8,'medium','Who composed the Nutcracker ballet?',['Tchaikovsky','Mozart','Beethoven','Stravinsky'],0,'Russian composer, 1892'),
+	qb(8,'hard','What art movement rejected traditional aesthetics after WWI?',['Dada','Impressionism','Baroque','Rococo'],0,'Anti-art, absurdist'),
+	qb(8,'easy','What type of painting uses watercolors?',['Watercolor','Fresco','Tempera','Gouache'],0,'Pigments dissolved in water'),
+	qb(8,'medium','Who wrote Les Miserables?',['Victor Hugo','Alexandre Dumas','Gustave Flaubert','Emile Zola'],0,'Jean Valjean and Inspector Javert'),
+	qb(8,'hard','What is a fresco painting technique?',['Painting on wet plaster','Painting on canvas','Painting on wood','Painting on glass'],0,'Used in the Sistine Chapel'),
+	qb(8,'medium','What is kabuki?',['Japanese theater form','A martial art','A cooking style','A type of poetry'],0,'Elaborate costumes and makeup'),
+	qb(8,'hard','Who sculpted the Venus de Milo?',['Alexandros of Antioch','Michelangelo','Phidias','Praxiteles'],0,'Ancient Greek, armless marble statue'),
+
+	// ---- 9: General Knowledge (10 more) ----
+	qb(9,'easy','What is the longest bone in the human body?',['Femur','Humerus','Tibia','Fibula'],0,'Thighbone'),
+	qb(9,'easy','How many minutes are in an hour?',['60','100','30','90'],0,'Also 3,600 seconds'),
+	qb(9,'medium','What is the capital of New Zealand?',['Wellington','Auckland','Christchurch','Hamilton'],0,'Not the largest city'),
+	qb(9,'medium','What gas do we exhale more of than we inhale?',['Carbon dioxide','Oxygen','Nitrogen','Hydrogen'],0,'Product of cellular respiration'),
+	qb(9,'hard','What is Avogadro\'s number approximately?',['6.022 x 10^23','3.14 x 10^10','9.8 x 10^15','1.6 x 10^19'],0,'Number of particles in a mole'),
+	qb(9,'easy','What is the largest bird in the world?',['Ostrich','Emu','Albatross','Condor'],0,'Cannot fly, runs fast'),
+	qb(9,'medium','What element makes up most of Earth\'s atmosphere?',['Nitrogen','Oxygen','Argon','Carbon dioxide'],0,'About 78 percent'),
+	qb(9,'hard','What is the Trolley Problem?',['An ethical thought experiment','A physics puzzle','A math theorem','A computer algorithm'],0,'Divert the trolley or not'),
+	qb(9,'medium','What country has the most neighbors?',['China','Russia','Brazil','Germany'],0,'Shares borders with 14 countries'),
+	qb(9,'hard','What is Zeno\'s Paradox about?',['Motion and infinity','Time travel','Light speed','Parallel universes'],0,'Achilles and the tortoise'),
+
+	// ============================================================
 	// ROUND 4 QUESTIONS — 100 additional (10 per category, total 400)
 	// ============================================================
 
@@ -707,6 +835,7 @@ const defaultGameState = (): GameState => ({
 	results: [],
 	gameStartTime: 0, elapsedTime: 0, xpGained: 0,
 	aiScore: 0, aiCorrect: 0,
+	lives: 3, dynamicDifficulty: 'easy',
 });
 
 let gs: GameState = defaultGameState();
@@ -749,6 +878,13 @@ let wrongFlashTimer = 0;
 
 // Review state
 let reviewPage = 0;
+
+// Achievement notification state
+let achvNotifyTimer = 0;
+let pendingAchievements: number[] = [];
+
+// Leaderboard filter
+let leaderboardFilter = 'all';
 
 // Streak effects
 let streakLevel = 0;
@@ -1073,6 +1209,12 @@ function getQuestionsForGame(mode: GameMode, category: number, difficulty: Diffi
 	if (mode === 'daily') {
 		const rng = mulberry32(getDailySeed());
 		pool = shuffle(pool, rng);
+	} else if (mode === 'endless') {
+		// Endless starts with easy questions, shuffled
+		const easyPool = shuffle(pool.filter(q => q.difficulty === 'easy'));
+		const medPool = shuffle(pool.filter(q => q.difficulty === 'medium'));
+		const hardPool = shuffle(pool.filter(q => q.difficulty === 'hard'));
+		pool = [...easyPool, ...medPool, ...hardPool];
 	} else {
 		// Difficulty-based prioritization: matching difficulty first, then others as filler
 		const matching = shuffle(pool.filter(q => q.difficulty === difficulty));
@@ -1093,7 +1235,7 @@ function startGame(mode: GameMode, difficulty: Difficulty, category: number): vo
 	gs.gameStartTime = Date.now();
 
 	// Set timer
-	if (mode === 'practice' || mode === 'streak') {
+	if (mode === 'practice' || mode === 'streak' || mode === 'endless') {
 		gs.maxTimer = 9999;
 		gs.timer = 9999;
 	} else if (mode === 'speed') {
@@ -1128,8 +1270,14 @@ function beginPlay(): void {
 
 function showQuestion(): void {
 	if (gs.currentIndex >= gs.questions.length) {
-		endGame();
-		return;
+		if (gs.mode === 'endless') {
+			// Reshuffle and reset index to loop
+			gs.questions = shuffle(gs.questions);
+			gs.currentIndex = 0;
+		} else {
+			endGame();
+			return;
+		}
 	}
 
 	const question = gs.questions[gs.currentIndex];
@@ -1246,6 +1394,15 @@ function selectAnswer(idx: number): void {
 			spawnTrailParticles();
 		}
 
+		// Endless mode dynamic difficulty
+		if (gs.mode === 'endless') {
+			if (gs.correctCount >= 25) {
+				gs.dynamicDifficulty = 'hard';
+			} else if (gs.correctCount >= 10) {
+				gs.dynamicDifficulty = 'medium';
+			}
+		}
+
 		// Streak milestone haptic
 		if (worldRef && (gs.streak === 5 || gs.streak === 10 || gs.streak === 25)) {
 			triggerStreakHaptic(worldRef);
@@ -1271,6 +1428,18 @@ function selectAnswer(idx: number): void {
 			updateHUD();
 			return;
 		}
+
+		// Endless mode: lose a life on wrong answer
+		if (gs.mode === 'endless') {
+			gs.lives--;
+			showToastMsg(`Lives: ${gs.lives} remaining`, 1.5);
+			if (gs.lives <= 0) {
+				feedbackShowing = true;
+				feedbackTimer = 1.8;
+				updateHUD();
+				return;
+			}
+		}
 	}
 
 	updateHUD();
@@ -1283,9 +1452,19 @@ function selectAnswer(idx: number): void {
 function nextQuestion(): void {
 	gs.currentIndex++;
 
+	// Endless mode: check lives
+	if (gs.mode === 'endless' && gs.lives <= 0) {
+		endGame();
+		return;
+	}
+
 	// Check end conditions
 	const maxQ = MODE_QUESTION_COUNT[gs.mode];
-	if (gs.currentIndex >= gs.questions.length || gs.currentIndex >= maxQ) {
+	if (gs.currentIndex >= gs.questions.length && gs.mode !== 'endless') {
+		endGame();
+		return;
+	}
+	if (gs.currentIndex >= maxQ) {
 		endGame();
 		return;
 	}
@@ -1373,15 +1552,19 @@ function endGame(): void {
 
 	// Check achievements
 	let newAchievements = 0;
+	pendingAchievements = [];
 	for (let i = 0; i < ACHIEVEMENT_DEFS.length; i++) {
 		if (!unlockedAchievements[i] && ACHIEVEMENT_DEFS[i].check(stats, gs)) {
 			unlockedAchievements[i] = true;
 			newAchievements++;
+			pendingAchievements.push(i);
 		}
 	}
 	saveAchievements();
 	if (newAchievements > 0) {
 		showToastMsg(`${newAchievements} new achievement${newAchievements > 1 ? 's' : ''} unlocked!`, 3);
+		// Start cycling achievement notifications
+		achvNotifyTimer = 0.5; // Small delay before first notification
 	}
 
 	// Update leaderboard
@@ -1527,7 +1710,7 @@ function updateHUD(): void {
 	const tm = d.getElementById('lbl-timer') as UIKit.Text;
 	if (gs.mode === 'speed') {
 		tm?.setProperties({ text: `${Math.ceil(speedModeTimer)}s` });
-	} else if (gs.mode === 'practice' || gs.mode === 'streak') {
+	} else if (gs.mode === 'practice' || gs.mode === 'streak' || gs.mode === 'endless') {
 		tm?.setProperties({ text: '--' });
 	} else {
 		tm?.setProperties({ text: `${Math.ceil(gs.timer)}s` });
@@ -1536,15 +1719,25 @@ function updateHUD(): void {
 	const md = d.getElementById('lbl-mode') as UIKit.Text;
 	// Show difficulty and category info alongside mode
 	let modeText = gs.mode.toUpperCase();
-	const diffLabel = gs.difficulty === 'easy' ? 'EASY' : gs.difficulty === 'medium' ? 'MED' : 'HARD';
-	modeText += ` [${diffLabel}]`;
+	if (gs.mode === 'endless') {
+		const dynDiff = gs.dynamicDifficulty === 'easy' ? 'EASY' : gs.dynamicDifficulty === 'medium' ? 'MED' : 'HARD';
+		modeText += ` [${dynDiff}]`;
+	} else {
+		const diffLabel = gs.difficulty === 'easy' ? 'EASY' : gs.difficulty === 'medium' ? 'MED' : 'HARD';
+		modeText += ` [${diffLabel}]`;
+	}
 	if (gs.mode === 'category' && gs.category >= 0) {
 		modeText += ` ${CATEGORIES[gs.category]}`;
 	}
 	md?.setProperties({ text: modeText });
 
 	const st = d.getElementById('lbl-streak') as UIKit.Text;
-	st?.setProperties({ text: `Streak: ${gs.streak}` });
+	if (gs.mode === 'endless') {
+		const hearts = gs.lives > 0 ? '\u2764'.repeat(gs.lives) : 'DEAD';
+		st?.setProperties({ text: `Lives: ${hearts}` });
+	} else {
+		st?.setProperties({ text: `Streak: ${gs.streak}` });
+	}
 
 	const l1 = d.getElementById('lbl-lifeline1') as UIKit.Text;
 	l1?.setProperties({ text: gs.lifelines.fifty ? '50:50' : '---' });
@@ -1563,6 +1756,8 @@ function updateGameOverUI(): void {
 	let resultText = gs.correctCount > gs.totalAnswered * 0.7 ? 'GREAT JOB!' : 'GAME OVER';
 	if (gs.mode === 'challenge') {
 		resultText = gs.score > gs.aiScore ? 'YOU WIN!' : gs.score < gs.aiScore ? 'AI WINS!' : 'TIE GAME!';
+	} else if (gs.mode === 'endless') {
+		resultText = `Survived ${gs.totalAnswered} questions!`;
 	}
 
 	(d.getElementById('lbl-result') as UIKit.Text)?.setProperties({ text: resultText });
@@ -1664,11 +1859,14 @@ function updateSettingsUI(): void {
 function updateLeaderboardUI(): void {
 	const d = docs['leaderboard'];
 	if (!d) return;
-	for (let i = 0; i < 10; i++) {
+	const filtered = leaderboardFilter === 'all'
+		? leaderboard
+		: leaderboard.filter(e => e.mode.toLowerCase() === leaderboardFilter);
+	for (let i = 0; i < 15; i++) {
 		const el = d.getElementById(`row${i}`) as UIKit.Text;
 		if (!el) continue;
-		if (i < leaderboard.length) {
-			const e = leaderboard[i];
+		if (i < filtered.length) {
+			const e = filtered[i];
 			el.setProperties({ text: `#${i + 1}  ${e.score}pts  ${e.mode}  ${e.name}` });
 		} else {
 			el.setProperties({ text: `#${i + 1}  ---` });
@@ -1933,6 +2131,7 @@ class TriviaSystem extends createSystem({
 	uiToast: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/toast.json')] },
 	uiHelp: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/help.json')] },
 	uiReview: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/review.json')] },
+	uiAchvNotify: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/achvnotify.json')] },
 }) {
 	private selectedMode: GameMode = 'classic';
 	private selectedCategory = -1;
@@ -1976,6 +2175,10 @@ class TriviaSystem extends createSystem({
 			(doc.getElementById('btn-challenge') as UIKit.Text)?.setProperties({ onClick: () => {
 				this.selectedMode = 'challenge';
 				showScreen('difficulty');
+			} });
+			// Endless mode button — skips difficulty select
+			(doc.getElementById('btn-endless') as UIKit.Text)?.setProperties({ onClick: () => {
+				startGame('endless', 'easy', -1);
 			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
 		});
@@ -2136,6 +2339,18 @@ class TriviaSystem extends createSystem({
 		this.queries.uiLeaderboard.subscribe('qualify', (entity: any) => {
 			const doc = entity.getValue(PanelDocument, 'document') as UIKitDocument;
 			docs['leaderboard'] = doc;
+			(doc.getElementById('btn-all') as UIKit.Text)?.setProperties({ onClick: () => {
+				leaderboardFilter = 'all';
+				updateLeaderboardUI();
+			} });
+			(doc.getElementById('btn-classic-filter') as UIKit.Text)?.setProperties({ onClick: () => {
+				leaderboardFilter = 'classic';
+				updateLeaderboardUI();
+			} });
+			(doc.getElementById('btn-challenge-filter') as UIKit.Text)?.setProperties({ onClick: () => {
+				leaderboardFilter = 'challenge';
+				updateLeaderboardUI();
+			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
 		});
 
@@ -2174,6 +2389,12 @@ class TriviaSystem extends createSystem({
 			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('gameover') });
 		});
+
+		// ---- Achievement Notification ----
+		this.queries.uiAchvNotify.subscribe('qualify', (entity: any) => {
+			const doc = entity.getValue(PanelDocument, 'document') as UIKitDocument;
+			docs['achvnotify'] = doc;
+		});
 	}
 
 	update(delta: number, time: number) {
@@ -2201,12 +2422,38 @@ class TriviaSystem extends createSystem({
 			}
 		}
 
+		// ---- Achievement Notification timer ----
+		if (achvNotifyTimer > 0) {
+			achvNotifyTimer -= delta;
+			if (achvNotifyTimer <= 0) {
+				if (pendingAchievements.length > 0) {
+					const achIdx = pendingAchievements.shift()!;
+					const ach = ACHIEVEMENT_DEFS[achIdx];
+					const d = docs['achvnotify'];
+					if (d) {
+						const titleLbl = d.getElementById('lbl-achv-title') as UIKit.Text;
+						titleLbl?.setProperties({ text: 'ACHIEVEMENT UNLOCKED!' });
+						const nameLbl = d.getElementById('lbl-achv-name') as UIKit.Text;
+						nameLbl?.setProperties({ text: ach.name });
+						const descLbl = d.getElementById('lbl-achv-desc') as UIKit.Text;
+						descLbl?.setProperties({ text: ach.desc });
+					}
+					showPanel('achvnotify');
+					achvNotifyTimer = 3.0; // Show for 3 seconds
+				} else {
+					hidePanel('achvnotify');
+				}
+			}
+		}
+
 		// ---- Feedback timer ----
 		if (feedbackShowing) {
 			feedbackTimer -= delta;
 			if (feedbackTimer <= 0) {
 				feedbackShowing = false;
 				if (gs.mode === 'streak' && gs.combo === 0 && gs.totalAnswered > 0) {
+					endGame();
+				} else if (gs.mode === 'endless' && gs.lives <= 0) {
 					endGame();
 				} else {
 					nextQuestion();
@@ -2226,7 +2473,7 @@ class TriviaSystem extends createSystem({
 					return;
 				}
 				updateHUD();
-			} else if (gs.mode !== 'practice' && gs.mode !== 'streak') {
+			} else if (gs.mode !== 'practice' && gs.mode !== 'streak' && gs.mode !== 'endless') {
 				if (!gs.timeFrozen) gs.timer -= delta;
 				if (gs.timer <= 0) {
 					gs.timer = 0;
@@ -2286,6 +2533,20 @@ class TriviaSystem extends createSystem({
 			}
 		}
 
+		// ---- Holographic panel float (menu panels only, not during gameplay) ----
+		if (!gameRunning) {
+			const menuPanels = ['title', 'modeselect', 'catpick', 'difficulty', 'achvlist', 'stats', 'settings', 'leaderboard', 'help', 'review', 'gameover'];
+			let panelIndex = 0;
+			for (const name of menuPanels) {
+				const ov = offsets[name];
+				const pc = PANEL_CONFIGS[name];
+				if (ov && pc && ov[1] > -50) {
+					ov[1] = pc.y + Math.sin(time * 0.8 + panelIndex * 0.5) * 0.001;
+				}
+				panelIndex++;
+			}
+		}
+
 		// ---- Animate particles ----
 		if (particleGeo) {
 			const pos = particleGeo.getAttribute('position');
@@ -2294,8 +2555,11 @@ class TriviaSystem extends createSystem({
 					let y = (pos as any).getY(i) + particleSpeeds[i] * delta;
 					if (y > 6) y = -0.5;
 					(pos as any).setY(i, y);
-					const x = (pos as any).getX(i) + Math.sin(time * 0.5 + i) * 0.002;
-					(pos as any).setX(i, x);
+					// Performance: skip X oscillation for off-screen particles
+					if (y > -10) {
+						const x = (pos as any).getX(i) + Math.sin(time * 0.5 + i) * 0.002;
+						(pos as any).setX(i, x);
+					}
 				}
 				(pos as any).needsUpdate = true;
 			}
@@ -2324,10 +2588,16 @@ class TriviaSystem extends createSystem({
 			}
 		}
 
-		// ---- Animate wireframes ----
+		// ---- Animate wireframes (skip distant ones for performance) ----
 		const wireSpeedMult = streakLevel === 2 ? 3 : streakLevel === 1 ? 2 : 1;
 		for (let i = 0; i < wireframeGroups.length; i++) {
 			const g = wireframeGroups[i];
+			// Performance: skip wireframes beyond 15 units from camera
+			const dx = g.position.x;
+			const dy = g.position.y - 1.6;
+			const dz = g.position.z;
+			const distSq = dx * dx + dy * dy + dz * dz;
+			if (distSq > 225) continue; // 15^2 = 225
 			g.rotation.x += (0.15 + i * 0.02) * delta * wireSpeedMult;
 			g.rotation.y += (0.2 + i * 0.03) * delta * wireSpeedMult;
 			g.position.y += Math.sin(time + i * 1.5) * 0.002;
