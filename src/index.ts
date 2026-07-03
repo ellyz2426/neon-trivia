@@ -86,7 +86,7 @@ interface AchDef {
 	check: (s: GameStats, g: GameState) => boolean;
 }
 
-type GameMode = 'classic' | 'speed' | 'streak' | 'category' | 'daily' | 'blitz' | 'marathon' | 'practice' | 'challenge' | 'endless';
+type GameMode = 'classic' | 'speed' | 'streak' | 'category' | 'daily' | 'blitz' | 'marathon' | 'practice' | 'challenge' | 'endless' | 'survival';
 type Difficulty = 'easy' | 'medium' | 'hard';
 type Screen = 'title' | 'modeselect' | 'catpick' | 'difficulty' | 'countdown' | 'playing' | 'pause' | 'gameover' | 'achvlist' | 'stats' | 'settings' | 'leaderboard' | 'help' | 'review';
 
@@ -119,6 +119,7 @@ interface GameState {
 	aiCorrect: number;
 	lives: number;
 	dynamicDifficulty: Difficulty;
+	survivalTimer: number;
 }
 
 // ============================================================
@@ -142,7 +143,7 @@ const THEMES = [
 const MODE_QUESTION_COUNT: Record<GameMode, number> = {
 	classic: 20, speed: 999, streak: 999, category: 20,
 	daily: 20, blitz: 999, marathon: 50, practice: 20, challenge: 20,
-	endless: 99999,
+	endless: 99999, survival: 99999,
 };
 
 const DIFF_TIMERS: Record<Difficulty, number> = { easy: 30, medium: 20, hard: 15 };
@@ -768,11 +769,320 @@ const QUESTIONS: TriviaQuestion[] = [
 	qb(9,'hard','What is the Dunning-Kruger effect?',['Overestimating ability when unskilled','A physics phenomenon','A chemical reaction','A musical technique'],0,'Cognitive bias about competence'),
 	qb(9,'medium','What shape has 8 sides?',['Octagon','Hexagon','Pentagon','Decagon'],0,'Oct means eight'),
 	qb(9,'hard','What is Benford\'s Law?',['Distribution of leading digits','A physics law','A chemical rule','A musical pattern'],0,'Digit 1 appears about 30 percent'),
+
+	// ============ ROUND 6 — 100 new questions (600 total, 60/category) ============
+
+	// ---- 0: Science (10 more) ----
+	qb(0,'easy','What is the freezing point of water in Fahrenheit?',['32','0','100','212'],0,'Also 0 Celsius'),
+	qb(0,'medium','What is the most abundant gas in Earth\'s atmosphere?',['Nitrogen','Oxygen','Carbon dioxide','Argon'],0,'About 78 percent'),
+	qb(0,'medium','What organ produces insulin?',['Pancreas','Liver','Kidney','Stomach'],0,'Islets of Langerhans'),
+	qb(0,'hard','What is Heisenberg\'s uncertainty principle about?',['Position and momentum','Energy and mass','Time and space','Charge and spin'],0,'Cannot know both simultaneously'),
+	qb(0,'easy','How many planets are in our solar system?',['8','9','7','10'],0,'Pluto was reclassified'),
+	qb(0,'medium','What type of rock is formed from cooled lava?',['Igneous','Sedimentary','Metamorphic','Mineral'],0,'From volcanic activity'),
+	qb(0,'hard','What is the Pauli exclusion principle?',['No two fermions share quantum state','Energy is conserved','Entropy increases','Light has mass'],0,'Wolfgang Pauli, 1925'),
+	qb(0,'easy','What is the chemical symbol for gold?',['Au','Ag','Go','Gd'],0,'From Latin aurum'),
+	qb(0,'medium','How many chromosomes do humans have?',['46','44','48','42'],0,'23 pairs'),
+	qb(0,'hard','What is a quasar?',['Active galactic nucleus','A type of star','A planet','A nebula'],0,'Quasi-stellar radio source'),
+
+	// ---- 1: History (10 more) ----
+	qb(1,'easy','Who was the first man on the Moon?',['Neil Armstrong','Buzz Aldrin','Michael Collins','John Glenn'],0,'One small step'),
+	qb(1,'medium','What ancient wonder was in Babylon?',['Hanging Gardens','Colossus','Lighthouse','Mausoleum'],0,'Terraced gardens'),
+	qb(1,'hard','Who was the last Emperor of the Byzantine Empire?',['Constantine XI','Justinian','Basil II','Alexios I'],0,'Fell in 1453'),
+	qb(1,'easy','What war was fought between 1914 and 1918?',['World War I','World War II','Korean War','Civil War'],0,'The Great War'),
+	qb(1,'medium','Who wrote The Communist Manifesto?',['Karl Marx','Friedrich Engels','Vladimir Lenin','Leon Trotsky'],0,'With Engels in 1848'),
+	qb(1,'hard','What was the Code of Hammurabi?',['Ancient legal code','A cipher','A trade route','A religious text'],0,'Babylonian, circa 1750 BC'),
+	qb(1,'easy','What country gifted the Statue of Liberty to the USA?',['France','England','Germany','Spain'],0,'In 1886'),
+	qb(1,'medium','Who was the first female Prime Minister of the UK?',['Margaret Thatcher','Theresa May','Queen Victoria','Elizabeth I'],0,'The Iron Lady'),
+	qb(1,'hard','What was the Zimmermann Telegram?',['German proposal to Mexico against USA','A peace treaty','A trade agreement','A spy code'],0,'Helped bring US into WWI'),
+	qb(1,'medium','Which civilization invented paper?',['Chinese','Egyptian','Roman','Greek'],0,'Around 100 BC'),
+
+	// ---- 2: Geography (10 more) ----
+	qb(2,'easy','What is the largest country by area?',['Russia','Canada','China','USA'],0,'Spans two continents'),
+	qb(2,'medium','What river flows through London?',['Thames','Seine','Danube','Rhine'],0,'Major English river'),
+	qb(2,'hard','What is the driest non-polar desert?',['Atacama','Sahara','Gobi','Mojave'],0,'In South America'),
+	qb(2,'easy','What continent is Brazil on?',['South America','North America','Europe','Africa'],0,'Largest country there'),
+	qb(2,'medium','Capital of New Zealand?',['Wellington','Auckland','Christchurch','Hamilton'],0,'Named after a Duke'),
+	qb(2,'hard','What country has the most time zones?',['France','Russia','USA','China'],0,'Including overseas territories'),
+	qb(2,'easy','What ocean is between Europe and North America?',['Atlantic','Pacific','Indian','Arctic'],0,'Second largest ocean'),
+	qb(2,'medium','What is the longest mountain range on land?',['Andes','Himalayas','Rockies','Alps'],0,'South America, 7000 km'),
+	qb(2,'hard','What is the largest lake by surface area?',['Caspian Sea','Lake Superior','Lake Victoria','Lake Baikal'],0,'Technically a sea'),
+	qb(2,'medium','Capital of South Korea?',['Seoul','Busan','Incheon','Daegu'],0,'Over 9 million people'),
+
+	// ---- 3: Entertainment (10 more) ----
+	qb(3,'easy','What wizarding school does Harry Potter attend?',['Hogwarts','Beauxbatons','Durmstrang','Ilvermorny'],0,'In Scotland'),
+	qb(3,'medium','Who directed The Godfather?',['Francis Ford Coppola','Martin Scorsese','Steven Spielberg','Alfred Hitchcock'],0,'Released in 1972'),
+	qb(3,'hard','What anime features a notebook that kills?',['Death Note','Naruto','One Piece','Attack on Titan'],0,'Light Yagami'),
+	qb(3,'easy','What is the name of Batman\'s butler?',['Alfred','Jarvis','Watson','Jeeves'],0,'Alfred Pennyworth'),
+	qb(3,'medium','Which band released Abbey Road?',['The Beatles','The Rolling Stones','Led Zeppelin','Pink Floyd'],0,'1969 album'),
+	qb(3,'hard','Who created Mickey Mouse?',['Walt Disney','Jim Henson','Charles Schulz','Hanna-Barbera'],0,'With Ub Iwerks in 1928'),
+	qb(3,'easy','What superhero has an indestructible shield?',['Captain America','Iron Man','Thor','Hulk'],0,'Made of vibranium'),
+	qb(3,'medium','Who wrote 1984?',['George Orwell','Aldous Huxley','Ray Bradbury','H.G. Wells'],0,'Big Brother is watching'),
+	qb(3,'hard','What Pixar film is set inside emotions?',['Inside Out','Soul','Coco','Up'],0,'Joy, Sadness, Anger, Fear, Disgust'),
+	qb(3,'medium','Who played Gandalf in Lord of the Rings?',['Ian McKellen','Christopher Lee','Patrick Stewart','Michael Gambon'],0,'British actor, knighted'),
+
+	// ---- 4: Sports (10 more) ----
+	qb(4,'easy','How many quarters in a basketball game?',['4','2','3','6'],0,'12 minutes each in NBA'),
+	qb(4,'medium','What country invented baseball?',['United States','England','Japan','Cuba'],0,'America\'s pastime'),
+	qb(4,'hard','Who holds the 100m world record?',['Usain Bolt','Carl Lewis','Tyson Gay','Asafa Powell'],0,'9.58 seconds'),
+	qb(4,'easy','What sport uses a puck?',['Ice hockey','Field hockey','Lacrosse','Curling'],0,'Frozen rubber disk'),
+	qb(4,'medium','How long is a marathon in miles?',['26.2','24','25','30'],0,'42.195 kilometers'),
+	qb(4,'hard','What is a hat trick in soccer?',['3 goals by one player','3 assists','3 saves','3 fouls'],0,'Three of a kind'),
+	qb(4,'easy','What color is the center of an archery target?',['Yellow (Gold)','Red','Blue','White'],0,'Bulls-eye'),
+	qb(4,'medium','What sport does Serena Williams play?',['Tennis','Golf','Swimming','Gymnastics'],0,'23 Grand Slam singles titles'),
+	qb(4,'hard','Where were the first ancient Olympics held?',['Olympia, Greece','Athens','Rome','Sparta'],0,'776 BC'),
+	qb(4,'medium','How many players on a baseball team on field?',['9','10','11','8'],0,'Including pitcher and catcher'),
+
+	// ---- 5: Technology (10 more) ----
+	qb(5,'easy','What does RAM stand for?',['Random Access Memory','Read Access Memory','Rapid Access Module','Real-time Analog Memory'],0,'Temporary computer memory'),
+	qb(5,'medium','Who co-founded Microsoft with Bill Gates?',['Paul Allen','Steve Ballmer','Steve Wozniak','Larry Page'],0,'In 1975'),
+	qb(5,'hard','What was the first programming language?',['Fortran','COBOL','C','Assembly'],0,'1957, IBM'),
+	qb(5,'easy','What company makes the Galaxy phone series?',['Samsung','Apple','Google','Huawei'],0,'South Korean electronics giant'),
+	qb(5,'medium','What does SSD stand for?',['Solid State Drive','Super Speed Disk','System Storage Device','Secure Storage Drive'],0,'No moving parts'),
+	qb(5,'hard','What year was the first iPhone released?',['2007','2005','2008','2010'],0,'Steve Jobs keynote'),
+	qb(5,'easy','What does PDF stand for?',['Portable Document Format','Personal Data File','Print Document File','Public Digital Format'],0,'Adobe created it'),
+	qb(5,'medium','What language is most used for web front-end?',['JavaScript','Python','Java','C++'],0,'Runs in the browser'),
+	qb(5,'hard','What is Moore\'s Law doubling period?',['About 2 years','1 year','5 years','10 years'],0,'Transistor density'),
+	qb(5,'medium','What does IoT stand for?',['Internet of Things','Input of Technology','Integration of Tools','Interface of Terminals'],0,'Connected devices'),
+
+	// ---- 6: Nature (10 more) ----
+	qb(6,'easy','What is a baby cat called?',['Kitten','Cub','Pup','Foal'],0,'Also called kitty'),
+	qb(6,'medium','What is the tallest type of grass?',['Bamboo','Wheat','Sugar cane','Corn'],0,'Can grow over 30 meters'),
+	qb(6,'hard','What is the largest species of penguin?',['Emperor penguin','King penguin','Gentoo penguin','Adelie penguin'],0,'Up to 130 cm tall'),
+	qb(6,'easy','Do bees make honey?',['Yes','No','Only some species','Only in captivity'],0,'From flower nectar'),
+	qb(6,'medium','What animal has black and white stripes?',['Zebra','Tiger','Panda','Skunk'],0,'African equine'),
+	qb(6,'hard','What is the oldest living tree species?',['Bristlecone pine','Redwood','Oak','Baobab'],0,'Over 5,000 years old'),
+	qb(6,'easy','What season comes after winter?',['Spring','Summer','Fall','Winter again'],0,'Flowers bloom'),
+	qb(6,'medium','How many hearts does an octopus have?',['3','2','4','1'],0,'Two for gills, one for body'),
+	qb(6,'hard','What is the fastest land animal?',['Cheetah','Lion','Gazelle','Pronghorn'],0,'Up to 120 km/h'),
+	qb(6,'medium','What type of animal is a dolphin?',['Mammal','Fish','Reptile','Amphibian'],0,'Breathes air'),
+
+	// ---- 7: Food & Drink (10 more) ----
+	qb(7,'easy','What fruit is typically yellow when ripe?',['Banana','Apple','Grape','Cherry'],0,'Starts green'),
+	qb(7,'medium','What country is sushi from?',['Japan','China','Korea','Thailand'],0,'Rice and fish'),
+	qb(7,'hard','What is the Scoville scale?',['Measures chili pepper heat','Wine sweetness','Coffee strength','Tea quality'],0,'Capsaicin content'),
+	qb(7,'easy','What meal do you eat in the morning?',['Breakfast','Lunch','Dinner','Brunch'],0,'Breaks the fast'),
+	qb(7,'medium','What grain is beer typically made from?',['Barley','Wheat','Rice','Corn'],0,'Malted and fermented'),
+	qb(7,'hard','What is umami?',['Savory taste (fifth basic taste)','A spice','A cooking method','A type of sauce'],0,'Japanese word'),
+	qb(7,'easy','What color is milk?',['White','Yellow','Clear','Blue'],0,'From cows'),
+	qb(7,'medium','Where did croissants originate?',['Austria (Vienna)','France','Italy','Belgium'],0,'Kipferl ancestor'),
+	qb(7,'hard','What is tempering in chocolate making?',['Controlled heating/cooling for snap','Adding flavors','Melting','Mixing with milk'],0,'Crystal structure'),
+	qb(7,'medium','What nut is marzipan made from?',['Almonds','Peanuts','Cashews','Walnuts'],0,'Ground with sugar'),
+
+	// ---- 8: Arts & Culture (10 more) ----
+	qb(8,'easy','What instrument has 88 keys?',['Piano','Organ','Accordion','Harpsichord'],0,'Black and white keys'),
+	qb(8,'medium','Who sculpted The Thinker?',['Auguste Rodin','Michelangelo','Donatello','Bernini'],0,'French sculptor'),
+	qb(8,'hard','What art movement did Salvador Dali belong to?',['Surrealism','Cubism','Impressionism','Baroque'],0,'Melting clocks'),
+	qb(8,'easy','How many strings does a standard guitar have?',['6','4','8','12'],0,'EADGBE tuning'),
+	qb(8,'medium','What is the Louvre?',['A museum in Paris','A cathedral','A palace','A theater'],0,'Home of the Mona Lisa'),
+	qb(8,'hard','Who composed The Four Seasons?',['Vivaldi','Bach','Mozart','Beethoven'],0,'Antonio, Italian Baroque'),
+	qb(8,'easy','What is origami?',['Japanese paper folding','Painting','Pottery','Weaving'],0,'Cranes and flowers'),
+	qb(8,'medium','What country is Flamenco dancing from?',['Spain','Portugal','Mexico','Argentina'],0,'Andalusia region'),
+	qb(8,'hard','Who painted Girl with a Pearl Earring?',['Vermeer','Rembrandt','Van Gogh','Monet'],0,'Dutch Golden Age'),
+	qb(8,'medium','What is a haiku?',['Japanese poem (5-7-5 syllables)','A dance','A painting style','A sculpture'],0,'Three lines'),
+
+	// ---- 9: General Knowledge (10 more) ----
+	qb(9,'easy','How many continents are there?',['7','6','5','8'],0,'Including Antarctica'),
+	qb(9,'medium','What is the Roman numeral for 50?',['L','C','D','V'],0,'Between X and C'),
+	qb(9,'hard','What is a palindrome?',['Word/phrase same forwards and backwards','A type of poem','A math formula','A musical term'],0,'Like racecar or madam'),
+	qb(9,'easy','How many sides does a triangle have?',['3','4','5','6'],0,'Tri means three'),
+	qb(9,'medium','What is the most spoken language worldwide?',['English','Mandarin','Spanish','Hindi'],0,'By total speakers'),
+	qb(9,'hard','What is the Fibonacci sequence?',['Each number is sum of previous two','Prime numbers','Even numbers','Squares'],0,'0, 1, 1, 2, 3, 5, 8...'),
+	qb(9,'easy','What color do you get mixing red and blue?',['Purple','Green','Orange','Brown'],0,'A royal color'),
+	qb(9,'medium','What is the hardest natural substance?',['Diamond','Titanium','Tungsten','Quartz'],0,'10 on Mohs scale'),
+	qb(9,'hard','What logical fallacy attacks the person not the argument?',['Ad hominem','Straw man','Red herring','Slippery slope'],0,'Latin: to the person'),
+	qb(9,'medium','How many zeros in a million?',['6','5','7','8'],0,'1,000,000'),
 ];
 
 
 // ============================================================
-// ACHIEVEMENTS (40)
+// PROCEDURAL AUDIO (Web Audio tone synthesis)
+// ============================================================
+
+let audioCtx: AudioContext | null = null;
+
+function getAudioCtx(): AudioContext | null {
+	if (!audioCtx) {
+		try { audioCtx = new AudioContext(); } catch { return null; }
+	}
+	if (audioCtx.state === 'suspended') {
+		audioCtx.resume().catch(() => {});
+	}
+	return audioCtx;
+}
+
+function getVolume(): number {
+	return (settingsState.masterVol / 100) * (settingsState.sfxVol / 100);
+}
+
+function playTone(freq: number, duration: number, type: OscillatorType = 'sine', vol = 0.15): void {
+	const ctx = getAudioCtx();
+	if (!ctx) return;
+	const v = vol * getVolume();
+	if (v <= 0) return;
+	const osc = ctx.createOscillator();
+	const gain = ctx.createGain();
+	osc.type = type;
+	osc.frequency.value = freq;
+	gain.gain.setValueAtTime(v, ctx.currentTime);
+	gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+	osc.connect(gain);
+	gain.connect(ctx.destination);
+	osc.start(ctx.currentTime);
+	osc.stop(ctx.currentTime + duration);
+}
+
+function sfxCorrect(): void {
+	const ctx = getAudioCtx();
+	if (!ctx) return;
+	const v = 0.12 * getVolume();
+	if (v <= 0) return;
+	// Ascending major third
+	const t = ctx.currentTime;
+	for (let i = 0; i < 2; i++) {
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		osc.type = 'sine';
+		osc.frequency.value = i === 0 ? 523.25 : 659.25; // C5, E5
+		gain.gain.setValueAtTime(v, t + i * 0.08);
+		gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.08 + 0.2);
+		osc.connect(gain);
+		gain.connect(ctx.destination);
+		osc.start(t + i * 0.08);
+		osc.stop(t + i * 0.08 + 0.25);
+	}
+}
+
+function sfxWrong(): void {
+	const ctx = getAudioCtx();
+	if (!ctx) return;
+	const v = 0.1 * getVolume();
+	if (v <= 0) return;
+	const t = ctx.currentTime;
+	// Descending minor second buzz
+	for (let i = 0; i < 2; i++) {
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		osc.type = 'sawtooth';
+		osc.frequency.value = i === 0 ? 311 : 293; // Eb4, D4
+		gain.gain.setValueAtTime(v, t + i * 0.1);
+		gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.25);
+		osc.connect(gain);
+		gain.connect(ctx.destination);
+		osc.start(t + i * 0.1);
+		osc.stop(t + i * 0.1 + 0.3);
+	}
+}
+
+function sfxTick(): void {
+	playTone(1200, 0.05, 'sine', 0.06);
+}
+
+function sfxStreak(): void {
+	const ctx = getAudioCtx();
+	if (!ctx) return;
+	const v = 0.1 * getVolume();
+	if (v <= 0) return;
+	const t = ctx.currentTime;
+	// Ascending arpeggio: C5 E5 G5 C6
+	const freqs = [523.25, 659.25, 783.99, 1046.5];
+	for (let i = 0; i < freqs.length; i++) {
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		osc.type = 'triangle';
+		osc.frequency.value = freqs[i];
+		gain.gain.setValueAtTime(v, t + i * 0.07);
+		gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.07 + 0.2);
+		osc.connect(gain);
+		gain.connect(ctx.destination);
+		osc.start(t + i * 0.07);
+		osc.stop(t + i * 0.07 + 0.25);
+	}
+}
+
+function sfxAchievement(): void {
+	const ctx = getAudioCtx();
+	if (!ctx) return;
+	const v = 0.12 * getVolume();
+	if (v <= 0) return;
+	const t = ctx.currentTime;
+	// Fanfare: C5 E5 G5 hold
+	const freqs = [523.25, 659.25, 783.99];
+	for (let i = 0; i < freqs.length; i++) {
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		osc.type = 'triangle';
+		osc.frequency.value = freqs[i];
+		gain.gain.setValueAtTime(v, t + i * 0.1);
+		gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.5);
+		osc.connect(gain);
+		gain.connect(ctx.destination);
+		osc.start(t + i * 0.1);
+		osc.stop(t + i * 0.1 + 0.55);
+	}
+}
+
+function sfxGameOver(): void {
+	const ctx = getAudioCtx();
+	if (!ctx) return;
+	const v = 0.1 * getVolume();
+	if (v <= 0) return;
+	const t = ctx.currentTime;
+	// Descending minor chord
+	const freqs = [392, 349.23, 293.66]; // G4 F4 D4
+	for (let i = 0; i < freqs.length; i++) {
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		osc.type = 'triangle';
+		osc.frequency.value = freqs[i];
+		gain.gain.setValueAtTime(v, t + i * 0.15);
+		gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.15 + 0.4);
+		osc.connect(gain);
+		gain.connect(ctx.destination);
+		osc.start(t + i * 0.15);
+		osc.stop(t + i * 0.15 + 0.45);
+	}
+}
+
+function sfxClick(): void {
+	playTone(800, 0.04, 'sine', 0.05);
+}
+
+function sfxCountdown(): void {
+	playTone(440, 0.12, 'sine', 0.08);
+}
+
+function sfxGo(): void {
+	playTone(880, 0.2, 'triangle', 0.12);
+}
+
+function sfxTimerWarning(): void {
+	playTone(660, 0.08, 'square', 0.04);
+}
+
+function sfxSurvivalBonus(): void {
+	const ctx = getAudioCtx();
+	if (!ctx) return;
+	const v = 0.1 * getVolume();
+	if (v <= 0) return;
+	const t = ctx.currentTime;
+	const osc = ctx.createOscillator();
+	const gain = ctx.createGain();
+	osc.type = 'sine';
+	osc.frequency.setValueAtTime(400, t);
+	osc.frequency.linearRampToValueAtTime(800, t + 0.15);
+	gain.gain.setValueAtTime(v, t);
+	gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+	osc.connect(gain);
+	gain.connect(ctx.destination);
+	osc.start(t);
+	osc.stop(t + 0.25);
+}
+
+// Timer tick tracking
+let lastTickSecond = -1;
+
+// ============================================================
+// ACHIEVEMENTS (50)
 // ============================================================
 
 const ACHIEVEMENT_DEFS: AchDef[] = [
@@ -816,6 +1126,17 @@ const ACHIEVEMENT_DEFS: AchDef[] = [
 	{ name: 'Level 25', desc: 'Reach level 25', check: s => s.level >= 25 },
 	{ name: 'Score Chaser', desc: 'Accumulate 50,000 total score', check: s => s.totalScore >= 50000 },
 	{ name: 'Streak Survivor', desc: 'Survive 30+ in Streak mode', check: (s, g) => g.mode === 'streak' && g.correctCount >= 30 },
+	// ---- Round 6: Endless & new mode achievements ----
+	{ name: 'Survivor 10', desc: 'Survive 10 questions in Endless', check: (s, g) => g.mode === 'endless' && g.totalAnswered >= 10 },
+	{ name: 'Survivor 25', desc: 'Survive 25 questions in Endless', check: (s, g) => g.mode === 'endless' && g.totalAnswered >= 25 },
+	{ name: 'Survivor 50', desc: 'Survive 50 questions in Endless', check: (s, g) => g.mode === 'endless' && g.totalAnswered >= 50 },
+	{ name: 'Iron Will', desc: 'Reach Q25 in Endless with 3 lives', check: (s, g) => g.mode === 'endless' && g.totalAnswered >= 25 && g.lives >= 3 },
+	{ name: 'Challenge Champ', desc: 'Beat the AI in Challenge mode', check: (s, g) => g.mode === 'challenge' && g.totalAnswered >= 20 && g.score > g.aiScore },
+	{ name: 'Speed Racer', desc: 'Score 25+ correct in Speed mode', check: (s, g) => g.mode === 'speed' && g.correctCount >= 25 },
+	{ name: 'Quick Draw', desc: 'Answer within 2 seconds', check: (s, g) => g.timer >= g.maxTimer - 2 && g.correctCount >= 1 },
+	{ name: 'Centurion', desc: 'Answer 1,000 total questions', check: s => s.totalAnswers >= 1000 },
+	{ name: 'Perfectionist', desc: '100% accuracy in 10+ question game', check: (s, g) => g.totalAnswered >= 10 && g.correctCount === g.totalAnswered },
+	{ name: 'XP Hunter', desc: 'Earn 500+ XP in a single game', check: (s, g) => g.xpGained >= 500 },
 ];
 
 // ============================================================
@@ -836,6 +1157,7 @@ const defaultGameState = (): GameState => ({
 	gameStartTime: 0, elapsedTime: 0, xpGained: 0,
 	aiScore: 0, aiCorrect: 0,
 	lives: 3, dynamicDifficulty: 'easy',
+	survivalTimer: 30,
 });
 
 let gs: GameState = defaultGameState();
@@ -854,7 +1176,7 @@ const defaultStats = (): GameStats => ({
 
 let stats: GameStats = defaultStats();
 let leaderboard: LeaderboardEntry[] = [];
-let unlockedAchievements: boolean[] = new Array(40).fill(false);
+let unlockedAchievements: boolean[] = new Array(50).fill(false);
 let settingsState = { masterVol: 100, sfxVol: 100, musicVol: 100, themeIdx: 0 };
 let achvPage = 0;
 
@@ -889,6 +1211,9 @@ let leaderboardFilter = 'all';
 // Streak effects
 let streakLevel = 0;
 let defaultParticleColor = 0x00ffff;
+
+// Timer urgency
+let timerUrgencyActive = false;
 
 // Game history
 interface GameHistoryEntry {
@@ -981,7 +1306,13 @@ function loadAchievements(): void {
 		const raw = localStorage.getItem('neon-trivia-ach');
 		if (raw) {
 			const parsed = JSON.parse(raw);
-			if (Array.isArray(parsed) && parsed.length === 40) unlockedAchievements = parsed;
+			if (Array.isArray(parsed)) {
+				// Expand older saves (40) to 50 gracefully
+				unlockedAchievements = new Array(50).fill(false);
+				for (let i = 0; i < Math.min(parsed.length, 50); i++) {
+					unlockedAchievements[i] = !!parsed[i];
+				}
+			}
 		}
 	} catch { /* use defaults */ }
 }
@@ -1135,6 +1466,7 @@ function showToastMsg(msg: string, duration = 2): void {
 function showScreen(screen: Screen): void {
 	hideAllPanels();
 	currentScreen = screen;
+	sfxClick();
 
 	switch (screen) {
 		case 'title':
@@ -1245,6 +1577,10 @@ function startGame(mode: GameMode, difficulty: Difficulty, category: number): vo
 	} else if (mode === 'blitz') {
 		gs.maxTimer = 10;
 		gs.timer = 10;
+	} else if (mode === 'survival') {
+		gs.survivalTimer = 30;
+		gs.maxTimer = DIFF_TIMERS[difficulty];
+		gs.timer = DIFF_TIMERS[difficulty];
 	} else {
 		gs.maxTimer = DIFF_TIMERS[difficulty];
 		gs.timer = DIFF_TIMERS[difficulty];
@@ -1255,6 +1591,7 @@ function startGame(mode: GameMode, difficulty: Difficulty, category: number): vo
 	gameElapsed = 0;
 	feedbackShowing = false;
 	feedbackTimer = 0;
+	timerUrgencyActive = false;
 
 	// Start countdown
 	countdownTimer = 3;
@@ -1310,6 +1647,7 @@ function showQuestion(): void {
 
 	// Clear time freeze for new question
 	gs.timeFrozen = false;
+	lastTickSecond = -1;
 
 	// Reset timer for this question
 	if (gs.mode !== 'speed') {
@@ -1336,6 +1674,13 @@ function selectAnswer(idx: number): void {
 
 	gs.totalAnswered++;
 	gs.results[gs.currentIndex] = isCorrect;
+	lastTickSecond = -1;
+	// Restore timer urgency lights
+	const ansTheme = THEMES[settingsState.themeIdx];
+	for (const l of sceneLights) {
+		l.color.setHex(ansTheme.primary);
+		l.intensity = 0.5;
+	}
 
 	// Visual answer feedback — mark correct/wrong on buttons
 	const da = docs['answers'];
@@ -1355,6 +1700,9 @@ function selectAnswer(idx: number): void {
 
 	// Haptic feedback
 	if (worldRef) triggerHaptic(isCorrect, worldRef);
+
+	// Audio feedback
+	if (isCorrect) sfxCorrect(); else sfxWrong();
 
 	// Challenge mode: AI answers this question
 	if (gs.mode === 'challenge') {
@@ -1403,9 +1751,18 @@ function selectAnswer(idx: number): void {
 			}
 		}
 
-		// Streak milestone haptic
+		// Survival mode: add time on correct answer
+		if (gs.mode === 'survival') {
+			const bonus = question.difficulty === 'easy' ? 5 : question.difficulty === 'medium' ? 8 : 12;
+			gs.survivalTimer += bonus;
+			sfxSurvivalBonus();
+			showToastMsg(`+${bonus}s! Total: ${Math.ceil(gs.survivalTimer)}s`, 1);
+		}
+
+		// Streak milestone haptic + sound
 		if (worldRef && (gs.streak === 5 || gs.streak === 10 || gs.streak === 25)) {
 			triggerStreakHaptic(worldRef);
+			sfxStreak();
 		}
 	} else {
 		gs.combo = 0;
@@ -1440,6 +1797,19 @@ function selectAnswer(idx: number): void {
 				return;
 			}
 		}
+
+		// Survival mode: lose time on wrong answer
+		if (gs.mode === 'survival') {
+			const penalty = question.difficulty === 'easy' ? 8 : question.difficulty === 'medium' ? 6 : 4;
+			gs.survivalTimer -= penalty;
+			showToastMsg(`-${penalty}s! Total: ${Math.ceil(Math.max(0, gs.survivalTimer))}s`, 1.5);
+			if (gs.survivalTimer <= 0) {
+				feedbackShowing = true;
+				feedbackTimer = 1.5;
+				updateHUD();
+				return;
+			}
+		}
 	}
 
 	updateHUD();
@@ -1458,11 +1828,21 @@ function nextQuestion(): void {
 		return;
 	}
 
-	// Check end conditions
-	const maxQ = MODE_QUESTION_COUNT[gs.mode];
-	if (gs.currentIndex >= gs.questions.length && gs.mode !== 'endless') {
+	// Survival mode: check timer
+	if (gs.mode === 'survival' && gs.survivalTimer <= 0) {
 		endGame();
 		return;
+	}
+
+	// Check end conditions
+	const maxQ = MODE_QUESTION_COUNT[gs.mode];
+	if (gs.currentIndex >= gs.questions.length && gs.mode !== 'endless' && gs.mode !== 'survival') {
+		endGame();
+		return;
+	}
+	if (gs.mode === 'survival' && gs.currentIndex >= gs.questions.length) {
+		gs.questions = shuffle(gs.questions);
+		gs.currentIndex = 0;
 	}
 	if (gs.currentIndex >= maxQ) {
 		endGame();
@@ -1481,6 +1861,8 @@ function nextQuestion(): void {
 function endGame(): void {
 	gameRunning = false;
 	gs.elapsedTime = (Date.now() - gs.gameStartTime) / 1000;
+	lastTickSecond = -1;
+	sfxGameOver();
 
 	// Calculate XP
 	gs.xpGained = Math.floor(gs.score / 10) + gs.correctCount * 5;
@@ -1683,6 +2065,8 @@ function updateTitleLabels(): void {
 	if (!d) return;
 	const lvl = d.getElementById('lbl-level') as UIKit.Text;
 	lvl?.setProperties({ text: `LEVEL ${stats.level} -- ${stats.xp} XP` });
+	const xpProg = d.getElementById('lbl-xp-progress') as UIKit.Text;
+	xpProg?.setProperties({ text: `XP: ${stats.xp}/${xpForLevel(stats.level)} to next level` });
 	const ta = d.getElementById('lbl-total-answered') as UIKit.Text;
 	ta?.setProperties({ text: `Total Answered: ${stats.totalAnswers}` });
 	const bs = d.getElementById('lbl-best-score') as UIKit.Text;
@@ -1690,6 +2074,9 @@ function updateTitleLabels(): void {
 	const dl = d.getElementById('lbl-daily') as UIKit.Text;
 	const dailyDone = stats.lastDailyDate === todayStr();
 	dl?.setProperties({ text: dailyDone ? 'Daily: COMPLETED' : 'Daily: AVAILABLE' });
+	const achvCount = d.getElementById('lbl-achv-count') as UIKit.Text;
+	const unlocked = unlockedAchievements.filter(Boolean).length;
+	achvCount?.setProperties({ text: `Achievements: ${unlocked}/50` });
 }
 
 function updateHUD(): void {
@@ -1767,8 +2154,13 @@ function updateGameOverUI(): void {
 	(d.getElementById('lbl-accuracy') as UIKit.Text)?.setProperties({ text: `Accuracy: ${accuracy}%` });
 	(d.getElementById('lbl-streak') as UIKit.Text)?.setProperties({ text: `Best Streak: ${gs.bestStreak}` });
 	(d.getElementById('lbl-combo') as UIKit.Text)?.setProperties({ text: `Best Combo: x${gs.bestCombo}` });
-	(d.getElementById('lbl-time') as UIKit.Text)?.setProperties({ text: `Time: ${Math.floor(gs.elapsedTime)}s` });
+	const elSecs = Math.floor(gs.elapsedTime);
+	const elMin = Math.floor(elSecs / 60);
+	const elSecRem = elSecs % 60;
+	const timeStr = elMin > 0 ? `${elMin}m ${String(elSecRem).padStart(2, '0')}s` : `${elSecs}s`;
+	(d.getElementById('lbl-time') as UIKit.Text)?.setProperties({ text: `Time: ${timeStr}` });
 	(d.getElementById('lbl-xp') as UIKit.Text)?.setProperties({ text: `+${gs.xpGained} XP` });
+	(d.getElementById('lbl-level-prog') as UIKit.Text)?.setProperties({ text: `Level ${stats.level} -- ${stats.xp}/${xpForLevel(stats.level)} XP` });
 
 	// AI score display
 	const aiLbl = d.getElementById('lbl-ai-score') as UIKit.Text;
@@ -1795,7 +2187,7 @@ function updateAchievementsUI(): void {
 	const d = docs['achvlist'];
 	if (!d) return;
 	const unlocked = unlockedAchievements.filter(Boolean).length;
-	(d.getElementById('lbl-count') as UIKit.Text)?.setProperties({ text: `${unlocked}/40 unlocked` });
+	(d.getElementById('lbl-count') as UIKit.Text)?.setProperties({ text: `${unlocked}/50 unlocked` });
 
 	const pageSize = 15;
 	const startIdx = achvPage * pageSize;
@@ -2351,6 +2743,14 @@ class TriviaSystem extends createSystem({
 				leaderboardFilter = 'challenge';
 				updateLeaderboardUI();
 			} });
+			(doc.getElementById('btn-endless-filter') as UIKit.Text)?.setProperties({ onClick: () => {
+				leaderboardFilter = 'endless';
+				updateLeaderboardUI();
+			} });
+			(doc.getElementById('btn-speed-filter') as UIKit.Text)?.setProperties({ onClick: () => {
+				leaderboardFilter = 'speed';
+				updateLeaderboardUI();
+			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
 		});
 
@@ -2406,9 +2806,18 @@ class TriviaSystem extends createSystem({
 				const num = Math.ceil(countdownTimer);
 				const lbl = d.getElementById('lbl-count') as UIKit.Text;
 				lbl?.setProperties({ text: num > 0 ? String(num) : 'GO!' });
+				// Play countdown ticks
+				if (num > 0 && num !== lastTickSecond) {
+					lastTickSecond = num;
+					sfxCountdown();
+				} else if (num <= 0 && lastTickSecond !== 0) {
+					lastTickSecond = 0;
+					sfxGo();
+				}
 			}
 			if (countdownTimer <= -0.5) {
 				countdownActive = false;
+				lastTickSecond = -1;
 				beginPlay();
 			}
 			return; // Don't process other timers during countdown
@@ -2439,6 +2848,7 @@ class TriviaSystem extends createSystem({
 						descLbl?.setProperties({ text: ach.desc });
 					}
 					showPanel('achvnotify');
+					sfxAchievement();
 					achvNotifyTimer = 3.0; // Show for 3 seconds
 				} else {
 					hidePanel('achvnotify');
@@ -2475,8 +2885,32 @@ class TriviaSystem extends createSystem({
 				updateHUD();
 			} else if (gs.mode !== 'practice' && gs.mode !== 'streak' && gs.mode !== 'endless') {
 				if (!gs.timeFrozen) gs.timer -= delta;
+				// Timer urgency: tick sound when < 5s
+				if (gs.timer > 0 && gs.timer <= 5 && !gs.timeFrozen) {
+					const sec = Math.ceil(gs.timer);
+					if (sec !== lastTickSecond) {
+						lastTickSecond = sec;
+						sfxTick();
+					}
+				}
+				// Timer urgency: pulse lights red when < 5s
+				if (gs.timer > 0 && gs.timer <= 5 && !gs.timeFrozen) {
+					const pulse = 0.5 + Math.sin(time * 8) * 0.5;
+					for (const l of sceneLights) {
+						l.color.setHex(pulse > 0.5 ? 0xff2200 : THEMES[settingsState.themeIdx].primary);
+						l.intensity = 0.5 + pulse * 0.8;
+					}
+				}
 				if (gs.timer <= 0) {
 					gs.timer = 0;
+					lastTickSecond = -1;
+					sfxWrong();
+					// Restore lights after timeout
+					const theme = THEMES[settingsState.themeIdx];
+					for (const l of sceneLights) {
+						l.color.setHex(theme.primary);
+						l.intensity = 0.5;
+					}
 					// Time ran out for this question — treat as wrong
 					gs.totalAnswered++;
 					gs.results[gs.currentIndex] = false;

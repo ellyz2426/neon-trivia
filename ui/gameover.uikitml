@@ -1,4 +1,4 @@
-<panel width="420" height="620" background-color="#0a0a2a" border-radius="12" padding="16" gap="4" flex-direction="column" align-items="center">
+<panel width="420" height="640" background-color="#0a0a2a" border-radius="12" padding="16" gap="4" flex-direction="column" align-items="center">
   <text name="lbl-result" font-size="28" color="#ffcc00" font-weight="bold">GAME OVER</text>
   <container height="4"></container>
   <text name="lbl-mode" font-size="14" color="#888888">CLASSIC</text>
@@ -9,6 +9,7 @@
   <text name="lbl-combo" font-size="16" color="#cc88ff">Best Combo: x1</text>
   <text name="lbl-time" font-size="16" color="#66ccff">Time: 0s</text>
   <text name="lbl-xp" font-size="14" color="#ffcc00">+0 XP</text>
+  <text name="lbl-level-prog" font-size="11" color="#888888">Level 1 -- 0/100 XP</text>
   <text name="lbl-ai-score" font-size="16" color="#ff4466"></text>
   <container height="4"></container>
   <text font-size="12" color="#888888">RECENT GAMES</text>

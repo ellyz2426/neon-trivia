@@ -28,12 +28,12 @@
             ],
             "properties": {
               "name": "btn-all",
-              "fontSize": "12",
+              "fontSize": "11",
               "color": "#00ffff",
               "backgroundColor": "#002233",
-              "padding": "4",
+              "padding": "3",
               "borderRadius": "4",
-              "width": "80",
+              "width": "55",
               "textAlign": "center",
               "hoverColor": "#004455"
             },
@@ -47,12 +47,12 @@
             ],
             "properties": {
               "name": "btn-classic-filter",
-              "fontSize": "12",
+              "fontSize": "11",
               "color": "#00ffff",
               "backgroundColor": "#002233",
-              "padding": "4",
+              "padding": "3",
               "borderRadius": "4",
-              "width": "80",
+              "width": "68",
               "textAlign": "center",
               "hoverColor": "#004455"
             },
@@ -66,21 +66,59 @@
             ],
             "properties": {
               "name": "btn-challenge-filter",
-              "fontSize": "12",
+              "fontSize": "11",
               "color": "#ff4466",
               "backgroundColor": "#220011",
-              "padding": "4",
+              "padding": "3",
               "borderRadius": "4",
               "width": "80",
               "textAlign": "center",
               "hoverColor": "#440022"
             },
             "dataUid": "uid-6"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "ENDLESS"
+            ],
+            "properties": {
+              "name": "btn-endless-filter",
+              "fontSize": "11",
+              "color": "#66ff66",
+              "backgroundColor": "#003311",
+              "padding": "3",
+              "borderRadius": "4",
+              "width": "68",
+              "textAlign": "center",
+              "hoverColor": "#005522"
+            },
+            "dataUid": "uid-7"
+          },
+          {
+            "sourceTag": "text",
+            "type": "custom",
+            "children": [
+              "SPEED"
+            ],
+            "properties": {
+              "name": "btn-speed-filter",
+              "fontSize": "11",
+              "color": "#ff8866",
+              "backgroundColor": "#331100",
+              "padding": "3",
+              "borderRadius": "4",
+              "width": "55",
+              "textAlign": "center",
+              "hoverColor": "#552200"
+            },
+            "dataUid": "uid-8"
           }
         ],
         "properties": {
           "flexDirection": "row",
-          "gap": "6",
+          "gap": "4",
           "alignItems": "center"
         },
         "dataUid": "uid-3"
@@ -92,7 +130,7 @@
         "properties": {
           "height": "2"
         },
-        "dataUid": "uid-7"
+        "dataUid": "uid-9"
       },
       {
         "sourceTag": "text",
@@ -105,7 +143,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-8"
+        "dataUid": "uid-10"
       },
       {
         "sourceTag": "text",
@@ -118,7 +156,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-9"
+        "dataUid": "uid-11"
       },
       {
         "sourceTag": "text",
@@ -131,7 +169,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-10"
+        "dataUid": "uid-12"
       },
       {
         "sourceTag": "text",
@@ -144,7 +182,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-11"
+        "dataUid": "uid-13"
       },
       {
         "sourceTag": "text",
@@ -157,7 +195,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-12"
+        "dataUid": "uid-14"
       },
       {
         "sourceTag": "text",
@@ -170,7 +208,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-13"
+        "dataUid": "uid-15"
       },
       {
         "sourceTag": "text",
@@ -183,7 +221,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-14"
+        "dataUid": "uid-16"
       },
       {
         "sourceTag": "text",
@@ -196,7 +234,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-15"
+        "dataUid": "uid-17"
       },
       {
         "sourceTag": "text",
@@ -209,7 +247,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-16"
+        "dataUid": "uid-18"
       },
       {
         "sourceTag": "text",
@@ -222,7 +260,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-17"
+        "dataUid": "uid-19"
       },
       {
         "sourceTag": "text",
@@ -235,7 +273,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-18"
+        "dataUid": "uid-20"
       },
       {
         "sourceTag": "text",
@@ -248,7 +286,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-19"
+        "dataUid": "uid-21"
       },
       {
         "sourceTag": "text",
@@ -261,7 +299,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-20"
+        "dataUid": "uid-22"
       },
       {
         "sourceTag": "text",
@@ -274,7 +312,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-21"
+        "dataUid": "uid-23"
       },
       {
         "sourceTag": "text",
@@ -287,7 +325,7 @@
           "fontSize": "12",
           "color": "#00ffff"
         },
-        "dataUid": "uid-22"
+        "dataUid": "uid-24"
       },
       {
         "sourceTag": "container",
@@ -296,7 +334,7 @@
         "properties": {
           "height": "4"
         },
-        "dataUid": "uid-23"
+        "dataUid": "uid-25"
       },
       {
         "sourceTag": "text",
@@ -315,12 +353,12 @@
           "textAlign": "center",
           "hoverColor": "#550000"
         },
-        "dataUid": "uid-24"
+        "dataUid": "uid-26"
       }
     ],
     "properties": {
       "width": "420",
-      "height": "520",
+      "height": "540",
       "backgroundColor": "#0a0a2a",
       "borderRadius": "12",
       "padding": "16",
@@ -338,7 +376,7 @@
         "column": 0
       },
       "end": {
-        "line": 25,
+        "line": 27,
         "column": 8
       }
     },
@@ -358,7 +396,7 @@
         "column": 2
       },
       "end": {
-        "line": 6,
+        "line": 8,
         "column": 14
       }
     },
@@ -394,22 +432,22 @@
     },
     "uid-7": {
       "start": {
-        "line": 7,
-        "column": 2
+        "line": 6,
+        "column": 4
       },
       "end": {
-        "line": 7,
-        "column": 36
+        "line": 6,
+        "column": 191
       }
     },
     "uid-8": {
       "start": {
-        "line": 8,
-        "column": 2
+        "line": 7,
+        "column": 4
       },
       "end": {
-        "line": 8,
-        "column": 64
+        "line": 7,
+        "column": 187
       }
     },
     "uid-9": {
@@ -419,7 +457,7 @@
       },
       "end": {
         "line": 9,
-        "column": 64
+        "column": 36
       }
     },
     "uid-10": {
@@ -499,7 +537,7 @@
       },
       "end": {
         "line": 17,
-        "column": 65
+        "column": 64
       }
     },
     "uid-18": {
@@ -509,7 +547,7 @@
       },
       "end": {
         "line": 18,
-        "column": 66
+        "column": 64
       }
     },
     "uid-19": {
@@ -519,7 +557,7 @@
       },
       "end": {
         "line": 19,
-        "column": 66
+        "column": 65
       }
     },
     "uid-20": {
@@ -559,7 +597,7 @@
       },
       "end": {
         "line": 23,
-        "column": 36
+        "column": 66
       }
     },
     "uid-24": {
@@ -569,6 +607,26 @@
       },
       "end": {
         "line": 24,
+        "column": 66
+      }
+    },
+    "uid-25": {
+      "start": {
+        "line": 25,
+        "column": 2
+      },
+      "end": {
+        "line": 25,
+        "column": 36
+      }
+    },
+    "uid-26": {
+      "start": {
+        "line": 26,
+        "column": 2
+      },
+      "end": {
+        "line": 26,
         "column": 177
       }
     }

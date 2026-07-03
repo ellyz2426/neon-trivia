@@ -133,13 +133,26 @@
       {
         "sourceTag": "text",
         "type": "custom",
+        "children": [
+          "Level 1 -- 0/100 XP"
+        ],
+        "properties": {
+          "name": "lbl-level-prog",
+          "fontSize": "11",
+          "color": "#888888"
+        },
+        "dataUid": "uid-12"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
         "children": [],
         "properties": {
           "name": "lbl-ai-score",
           "fontSize": "16",
           "color": "#ff4466"
         },
-        "dataUid": "uid-12"
+        "dataUid": "uid-13"
       },
       {
         "sourceTag": "container",
@@ -148,7 +161,7 @@
         "properties": {
           "height": "4"
         },
-        "dataUid": "uid-13"
+        "dataUid": "uid-14"
       },
       {
         "sourceTag": "text",
@@ -160,7 +173,7 @@
           "fontSize": "12",
           "color": "#888888"
         },
-        "dataUid": "uid-14"
+        "dataUid": "uid-15"
       },
       {
         "sourceTag": "text",
@@ -171,7 +184,7 @@
           "fontSize": "11",
           "color": "#668899"
         },
-        "dataUid": "uid-15"
+        "dataUid": "uid-16"
       },
       {
         "sourceTag": "text",
@@ -182,7 +195,7 @@
           "fontSize": "11",
           "color": "#668899"
         },
-        "dataUid": "uid-16"
+        "dataUid": "uid-17"
       },
       {
         "sourceTag": "text",
@@ -193,7 +206,7 @@
           "fontSize": "11",
           "color": "#668899"
         },
-        "dataUid": "uid-17"
+        "dataUid": "uid-18"
       },
       {
         "sourceTag": "text",
@@ -204,7 +217,7 @@
           "fontSize": "11",
           "color": "#668899"
         },
-        "dataUid": "uid-18"
+        "dataUid": "uid-19"
       },
       {
         "sourceTag": "text",
@@ -215,7 +228,7 @@
           "fontSize": "11",
           "color": "#668899"
         },
-        "dataUid": "uid-19"
+        "dataUid": "uid-20"
       },
       {
         "sourceTag": "container",
@@ -224,7 +237,7 @@
         "properties": {
           "height": "4"
         },
-        "dataUid": "uid-20"
+        "dataUid": "uid-21"
       },
       {
         "sourceTag": "text",
@@ -243,7 +256,7 @@
           "textAlign": "center",
           "hoverColor": "#005522"
         },
-        "dataUid": "uid-21"
+        "dataUid": "uid-22"
       },
       {
         "sourceTag": "text",
@@ -262,7 +275,7 @@
           "textAlign": "center",
           "hoverColor": "#005588"
         },
-        "dataUid": "uid-22"
+        "dataUid": "uid-23"
       },
       {
         "sourceTag": "text",
@@ -281,12 +294,12 @@
           "textAlign": "center",
           "hoverColor": "#550000"
         },
-        "dataUid": "uid-23"
+        "dataUid": "uid-24"
       }
     ],
     "properties": {
       "width": "420",
-      "height": "620",
+      "height": "640",
       "backgroundColor": "#0a0a2a",
       "borderRadius": "12",
       "padding": "16",
@@ -304,7 +317,7 @@
         "column": 0
       },
       "end": {
-        "line": 23,
+        "line": 24,
         "column": 8
       }
     },
@@ -415,7 +428,7 @@
       },
       "end": {
         "line": 11,
-        "column": 66
+        "column": 87
       }
     },
     "uid-13": {
@@ -425,7 +438,7 @@
       },
       "end": {
         "line": 12,
-        "column": 36
+        "column": 66
       }
     },
     "uid-14": {
@@ -435,7 +448,7 @@
       },
       "end": {
         "line": 13,
-        "column": 58
+        "column": 36
       }
     },
     "uid-15": {
@@ -445,7 +458,7 @@
       },
       "end": {
         "line": 14,
-        "column": 59
+        "column": 58
       }
     },
     "uid-16": {
@@ -495,7 +508,7 @@
       },
       "end": {
         "line": 19,
-        "column": 36
+        "column": 59
       }
     },
     "uid-21": {
@@ -505,7 +518,7 @@
       },
       "end": {
         "line": 20,
-        "column": 181
+        "column": 36
       }
     },
     "uid-22": {
@@ -515,7 +528,7 @@
       },
       "end": {
         "line": 21,
-        "column": 183
+        "column": 181
       }
     },
     "uid-23": {
@@ -525,6 +538,16 @@
       },
       "end": {
         "line": 22,
+        "column": 183
+      }
+    },
+    "uid-24": {
+      "start": {
+        "line": 23,
+        "column": 2
+      },
+      "end": {
+        "line": 23,
         "column": 177
       }
     }

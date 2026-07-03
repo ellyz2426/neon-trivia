@@ -1,11 +1,13 @@
-<panel width="420" height="560" background-color="#0a0a2a" border-radius="12" padding="16" gap="8" flex-direction="column" align-items="center">
+<panel width="420" height="580" background-color="#0a0a2a" border-radius="12" padding="16" gap="8" flex-direction="column" align-items="center">
   <text name="lbl-title" font-size="32" color="#00ffff" font-weight="bold">NEON TRIVIA</text>
   <text name="lbl-subtitle" font-size="14" color="#66ccff">HOLOGRAPHIC QUIZ SHOW</text>
   <text name="lbl-level" font-size="12" color="#ffcc00">LEVEL 1 -- 0 XP</text>
+  <text name="lbl-xp-progress" font-size="10" color="#888888">XP: 0/100 to next level</text>
   <text name="lbl-total-answered" font-size="11" color="#888888">Total Answered: 0</text>
   <text name="lbl-best-score" font-size="11" color="#888888">Best Score: 0</text>
   <text name="lbl-daily" font-size="11" color="#ffcc00">Daily: AVAILABLE</text>
-  <container height="4"></container>
+  <text name="lbl-achv-count" font-size="10" color="#cc88ff">Achievements: 0/50</text>
+  <container height="2"></container>
   <text name="btn-play" font-size="20" color="#00ffff" background-color="#003355" padding="8" border-radius="6" width="280" text-align="center" hover-color="#005588">PLAY</text>
   <text name="btn-scores" font-size="20" color="#00ffff" background-color="#003355" padding="8" border-radius="6" width="280" text-align="center" hover-color="#005588">SCORES</text>
   <text name="btn-achievements" font-size="20" color="#ffcc00" background-color="#333300" padding="8" border-radius="6" width="280" text-align="center" hover-color="#555500">ACHIEVEMENTS</text>
