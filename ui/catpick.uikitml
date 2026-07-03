@@ -1,0 +1,15 @@
+<panel width="420" height="480" background-color="#0a0a2a" border-radius="12" padding="16" gap="6" flex-direction="column" align-items="center">
+  <text font-size="22" color="#cc88ff" font-weight="bold">SELECT CATEGORY</text>
+  <container height="4"></container>
+  <text name="btn-cat0" font-size="16" color="#00ffff" background-color="#003355" padding="7" border-radius="6" width="280" text-align="center" hover-color="#005588">SCIENCE</text>
+  <text name="btn-cat1" font-size="16" color="#ffcc00" background-color="#333300" padding="7" border-radius="6" width="280" text-align="center" hover-color="#555500">HISTORY</text>
+  <text name="btn-cat2" font-size="16" color="#66ff66" background-color="#003300" padding="7" border-radius="6" width="280" text-align="center" hover-color="#005500">GEOGRAPHY</text>
+  <text name="btn-cat3" font-size="16" color="#ff8866" background-color="#331100" padding="7" border-radius="6" width="280" text-align="center" hover-color="#552200">ENTERTAINMENT</text>
+  <text name="btn-cat4" font-size="16" color="#cc88ff" background-color="#330055" padding="7" border-radius="6" width="280" text-align="center" hover-color="#550077">SPORTS</text>
+  <text name="btn-cat5" font-size="16" color="#66ccff" background-color="#002244" padding="7" border-radius="6" width="280" text-align="center" hover-color="#004466">TECHNOLOGY</text>
+  <text name="btn-cat6" font-size="16" color="#ff66cc" background-color="#330033" padding="7" border-radius="6" width="280" text-align="center" hover-color="#550055">NATURE</text>
+  <text name="btn-cat7" font-size="16" color="#88ff88" background-color="#003322" padding="7" border-radius="6" width="280" text-align="center" hover-color="#005544">FOOD AND DRINK</text>
+  <text name="btn-cat8" font-size="16" color="#ffaa44" background-color="#332200" padding="7" border-radius="6" width="280" text-align="center" hover-color="#554400">ARTS AND CULTURE</text>
+  <text name="btn-cat9" font-size="16" color="#aaaaff" background-color="#222244" padding="7" border-radius="6" width="280" text-align="center" hover-color="#444466">GENERAL KNOWLEDGE</text>
+  <text name="btn-back" font-size="14" color="#ff4444" background-color="#330000" padding="4" border-radius="6" width="120" text-align="center" hover-color="#550000">BACK</text>
+</panel>

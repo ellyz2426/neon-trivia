@@ -1,0 +1,15 @@
+<panel width="500" height="100" background-color="#0a0a2acc" border-radius="8" padding="8" gap="4" flex-direction="column" align-items="center">
+  <container flex-direction="row" gap="16" align-items="center" justify-content="center">
+    <text name="lbl-score" font-size="18" color="#ffcc00">SCORE: 0</text>
+    <text name="lbl-question" font-size="18" color="#00ffff">Q: 1/20</text>
+    <text name="lbl-combo" font-size="18" color="#ff8866">x1</text>
+    <text name="lbl-timer" font-size="18" color="#66ff66">30s</text>
+    <text name="lbl-mode" font-size="12" color="#888888">CLASSIC</text>
+  </container>
+  <container flex-direction="row" gap="16" align-items="center" justify-content="center">
+    <text name="lbl-streak" font-size="12" color="#cc88ff">Streak: 0</text>
+    <text name="lbl-lifeline1" font-size="12" color="#ffcc00">50:50</text>
+    <text name="lbl-lifeline2" font-size="12" color="#66ff66">SKIP</text>
+    <text name="lbl-lifeline3" font-size="12" color="#ff8866">HINT</text>
+  </container>
+</panel>

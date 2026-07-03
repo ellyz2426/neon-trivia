@@ -1,0 +1,79 @@
+{
+  "element": {
+    "sourceTag": "panel",
+    "type": "custom",
+    "children": [
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "SCIENCE"
+        ],
+        "properties": {
+          "name": "lbl-category",
+          "fontSize": "12",
+          "color": "#cc88ff"
+        },
+        "dataUid": "uid-2"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "What is the chemical symbol for gold?"
+        ],
+        "properties": {
+          "name": "lbl-question",
+          "fontSize": "18",
+          "color": "#ffffff",
+          "textAlign": "center"
+        },
+        "dataUid": "uid-3"
+      }
+    ],
+    "properties": {
+      "width": "560",
+      "height": "120",
+      "backgroundColor": "#0a0a2acc",
+      "borderRadius": "10",
+      "padding": "12",
+      "gap": "6",
+      "flexDirection": "column",
+      "alignItems": "center"
+    },
+    "dataUid": "uid-1"
+  },
+  "classes": {},
+  "ranges": {
+    "uid-1": {
+      "start": {
+        "line": 0,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 8
+      }
+    },
+    "uid-2": {
+      "start": {
+        "line": 1,
+        "column": 2
+      },
+      "end": {
+        "line": 1,
+        "column": 73
+      }
+    },
+    "uid-3": {
+      "start": {
+        "line": 2,
+        "column": 2
+      },
+      "end": {
+        "line": 2,
+        "column": 123
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+<panel width="420" height="520" background-color="#0a0a2a" border-radius="12" padding="16" gap="6" flex-direction="column" align-items="center">
+  <text font-size="24" color="#00ffff" font-weight="bold">SELECT MODE</text>
+  <container height="4"></container>
+  <text name="btn-classic" font-size="18" color="#00ffff" background-color="#003355" padding="8" border-radius="6" width="280" text-align="center" hover-color="#005588">CLASSIC (20 Q)</text>
+  <text name="btn-speed" font-size="18" color="#ff8866" background-color="#331100" padding="8" border-radius="6" width="280" text-align="center" hover-color="#552200">SPEED (60s)</text>
+  <text name="btn-streak" font-size="18" color="#ffcc00" background-color="#333300" padding="8" border-radius="6" width="280" text-align="center" hover-color="#555500">STREAK</text>
+  <text name="btn-category" font-size="18" color="#66ff66" background-color="#003300" padding="8" border-radius="6" width="280" text-align="center" hover-color="#005500">CATEGORY</text>
+  <text name="btn-daily" font-size="18" color="#cc88ff" background-color="#330055" padding="8" border-radius="6" width="280" text-align="center" hover-color="#550077">DAILY CHALLENGE</text>
+  <text name="btn-blitz" font-size="18" color="#ff66cc" background-color="#330033" padding="8" border-radius="6" width="280" text-align="center" hover-color="#550055">BLITZ (10s)</text>
+  <text name="btn-marathon" font-size="18" color="#66ccff" background-color="#002244" padding="8" border-radius="6" width="280" text-align="center" hover-color="#004466">MARATHON (50 Q)</text>
+  <text name="btn-practice" font-size="18" color="#888888" background-color="#222222" padding="8" border-radius="6" width="280" text-align="center" hover-color="#444444">PRACTICE</text>
+  <text name="btn-back" font-size="16" color="#ff4444" background-color="#330000" padding="6" border-radius="6" width="140" text-align="center" hover-color="#550000">BACK</text>
+</panel>

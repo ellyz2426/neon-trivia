@@ -1,0 +1,16 @@
+<panel width="360" height="380" background-color="#0a0a2a" border-radius="12" padding="16" gap="4" flex-direction="column" align-items="center">
+  <text font-size="22" color="#66ff66" font-weight="bold">STATS</text>
+  <container height="4"></container>
+  <text name="stat0" font-size="13" color="#00ffff">Games Played: 0</text>
+  <text name="stat1" font-size="13" color="#00ffff">Total Score: 0</text>
+  <text name="stat2" font-size="13" color="#00ffff">Best Score: 0</text>
+  <text name="stat3" font-size="13" color="#00ffff">Correct Answers: 0</text>
+  <text name="stat4" font-size="13" color="#00ffff">Total Questions: 0</text>
+  <text name="stat5" font-size="13" color="#00ffff">Accuracy: 0%</text>
+  <text name="stat6" font-size="13" color="#00ffff">Best Streak: 0</text>
+  <text name="stat7" font-size="13" color="#00ffff">Lifelines Used: 0</text>
+  <text name="stat8" font-size="13" color="#00ffff">Daily Streak: 0 days</text>
+  <text name="stat9" font-size="13" color="#00ffff">Level: 1</text>
+  <container height="6"></container>
+  <text name="btn-back" font-size="16" color="#ff4444" background-color="#330000" padding="6" border-radius="6" width="140" text-align="center" hover-color="#550000">BACK</text>
+</panel>

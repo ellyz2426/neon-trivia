@@ -1,0 +1,16 @@
+<panel width="420" height="420" background-color="#0a0a2a" border-radius="12" padding="16" gap="4" flex-direction="column" align-items="center">
+  <text font-size="24" color="#ffcc00" font-weight="bold">LEADERBOARD</text>
+  <container height="4"></container>
+  <text name="row0" font-size="13" color="#00ffff">1. ---</text>
+  <text name="row1" font-size="13" color="#00ffff">2. ---</text>
+  <text name="row2" font-size="13" color="#00ffff">3. ---</text>
+  <text name="row3" font-size="13" color="#00ffff">4. ---</text>
+  <text name="row4" font-size="13" color="#00ffff">5. ---</text>
+  <text name="row5" font-size="13" color="#00ffff">6. ---</text>
+  <text name="row6" font-size="13" color="#00ffff">7. ---</text>
+  <text name="row7" font-size="13" color="#00ffff">8. ---</text>
+  <text name="row8" font-size="13" color="#00ffff">9. ---</text>
+  <text name="row9" font-size="13" color="#00ffff">10. ---</text>
+  <container height="6"></container>
+  <text name="btn-back" font-size="16" color="#ff4444" background-color="#330000" padding="6" border-radius="6" width="140" text-align="center" hover-color="#550000">BACK</text>
+</panel>

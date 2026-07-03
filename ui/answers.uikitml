@@ -1,0 +1,15 @@
+<panel width="560" height="200" background-color="#0a0a2a88" border-radius="10" padding="12" gap="8" flex-direction="column" align-items="center">
+  <container flex-direction="row" gap="12" width="530">
+    <text name="btn-a" font-size="16" color="#00ffff" background-color="#003355" padding="10" border-radius="6" flex-grow="1" text-align="center" hover-color="#005588">A) Gold</text>
+    <text name="btn-b" font-size="16" color="#00ffff" background-color="#003355" padding="10" border-radius="6" flex-grow="1" text-align="center" hover-color="#005588">B) Silver</text>
+  </container>
+  <container flex-direction="row" gap="12" width="530">
+    <text name="btn-c" font-size="16" color="#00ffff" background-color="#003355" padding="10" border-radius="6" flex-grow="1" text-align="center" hover-color="#005588">C) Copper</text>
+    <text name="btn-d" font-size="16" color="#00ffff" background-color="#003355" padding="10" border-radius="6" flex-grow="1" text-align="center" hover-color="#005588">D) Iron</text>
+  </container>
+  <container flex-direction="row" gap="12">
+    <text name="btn-fifty" font-size="13" color="#ffcc00" background-color="#333300" padding="6" border-radius="4" hover-color="#555500">50:50</text>
+    <text name="btn-skip" font-size="13" color="#66ff66" background-color="#003300" padding="6" border-radius="4" hover-color="#005500">SKIP</text>
+    <text name="btn-hint" font-size="13" color="#ff8866" background-color="#331100" padding="6" border-radius="4" hover-color="#552200">HINT</text>
+  </container>
+</panel>

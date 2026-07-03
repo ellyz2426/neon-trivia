@@ -1,0 +1,4 @@
+<panel width="560" height="120" background-color="#0a0a2acc" border-radius="10" padding="12" gap="6" flex-direction="column" align-items="center">
+  <text name="lbl-category" font-size="12" color="#cc88ff">SCIENCE</text>
+  <text name="lbl-question" font-size="18" color="#ffffff" text-align="center">What is the chemical symbol for gold?</text>
+</panel>
