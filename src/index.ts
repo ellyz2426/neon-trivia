@@ -2097,6 +2097,8 @@ function updateHUD(): void {
 	const tm = d.getElementById('lbl-timer') as UIKit.Text;
 	if (gs.mode === 'speed') {
 		tm?.setProperties({ text: `${Math.ceil(speedModeTimer)}s` });
+	} else if (gs.mode === 'survival') {
+		tm?.setProperties({ text: `${Math.ceil(gs.survivalTimer)}s` });
 	} else if (gs.mode === 'practice' || gs.mode === 'streak' || gs.mode === 'endless') {
 		tm?.setProperties({ text: '--' });
 	} else {
@@ -2122,6 +2124,8 @@ function updateHUD(): void {
 	if (gs.mode === 'endless') {
 		const hearts = gs.lives > 0 ? '\u2764'.repeat(gs.lives) : 'DEAD';
 		st?.setProperties({ text: `Lives: ${hearts}` });
+	} else if (gs.mode === 'survival') {
+		st?.setProperties({ text: `Clock: ${Math.ceil(gs.survivalTimer)}s` });
 	} else {
 		st?.setProperties({ text: `Streak: ${gs.streak}` });
 	}
@@ -2145,6 +2149,8 @@ function updateGameOverUI(): void {
 		resultText = gs.score > gs.aiScore ? 'YOU WIN!' : gs.score < gs.aiScore ? 'AI WINS!' : 'TIE GAME!';
 	} else if (gs.mode === 'endless') {
 		resultText = `Survived ${gs.totalAnswered} questions!`;
+	} else if (gs.mode === 'survival') {
+		resultText = `Survived ${Math.floor(gs.elapsedTime)}s!`;
 	}
 
 	(d.getElementById('lbl-result') as UIKit.Text)?.setProperties({ text: resultText });
@@ -2162,12 +2168,25 @@ function updateGameOverUI(): void {
 	(d.getElementById('lbl-xp') as UIKit.Text)?.setProperties({ text: `+${gs.xpGained} XP` });
 	(d.getElementById('lbl-level-prog') as UIKit.Text)?.setProperties({ text: `Level ${stats.level} -- ${stats.xp}/${xpForLevel(stats.level)} XP` });
 
-	// AI score display
+	// AI score / difficulty breakdown display
 	const aiLbl = d.getElementById('lbl-ai-score') as UIKit.Text;
 	if (gs.mode === 'challenge') {
 		aiLbl?.setProperties({ text: `AI Score: ${gs.aiScore} (${gs.aiCorrect}/${gs.totalAnswered} correct)` });
 	} else {
-		aiLbl?.setProperties({ text: '' });
+		// Show per-difficulty breakdown from this game
+		const dCounts = { easy: { c: 0, t: 0 }, medium: { c: 0, t: 0 }, hard: { c: 0, t: 0 } };
+		for (let i = 0; i < gs.questions.length && i < gs.totalAnswered; i++) {
+			if (gs.results[i] !== undefined) {
+				const diff = gs.questions[i].difficulty;
+				dCounts[diff].t++;
+				if (gs.results[i]) dCounts[diff].c++;
+			}
+		}
+		const parts: string[] = [];
+		for (const diff of ['easy', 'medium', 'hard'] as const) {
+			if (dCounts[diff].t > 0) parts.push(`${diff[0].toUpperCase()}: ${dCounts[diff].c}/${dCounts[diff].t}`);
+		}
+		aiLbl?.setProperties({ text: parts.length > 0 ? parts.join(' | ') : '' });
 	}
 
 	// Recent games
@@ -2572,6 +2591,11 @@ class TriviaSystem extends createSystem({
 			(doc.getElementById('btn-endless') as UIKit.Text)?.setProperties({ onClick: () => {
 				startGame('endless', 'easy', -1);
 			} });
+			// Survival mode button — goes to difficulty select
+			(doc.getElementById('btn-survival') as UIKit.Text)?.setProperties({ onClick: () => {
+				this.selectedMode = 'survival';
+				showScreen('difficulty');
+			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
 		});
 
@@ -2865,6 +2889,8 @@ class TriviaSystem extends createSystem({
 					endGame();
 				} else if (gs.mode === 'endless' && gs.lives <= 0) {
 					endGame();
+				} else if (gs.mode === 'survival' && gs.survivalTimer <= 0) {
+					endGame();
 				} else {
 					nextQuestion();
 				}
@@ -2885,6 +2911,16 @@ class TriviaSystem extends createSystem({
 				updateHUD();
 			} else if (gs.mode !== 'practice' && gs.mode !== 'streak' && gs.mode !== 'endless') {
 				if (!gs.timeFrozen) gs.timer -= delta;
+				// Survival mode: tick survival clock too
+				if (gs.mode === 'survival') {
+					gs.survivalTimer -= delta;
+					if (gs.survivalTimer <= 0) {
+						gs.survivalTimer = 0;
+						sfxGameOver();
+						endGame();
+						return;
+					}
+				}
 				// Timer urgency: tick sound when < 5s
 				if (gs.timer > 0 && gs.timer <= 5 && !gs.timeFrozen) {
 					const sec = Math.ceil(gs.timer);
@@ -2893,12 +2929,22 @@ class TriviaSystem extends createSystem({
 						sfxTick();
 					}
 				}
-				// Timer urgency: pulse lights red when < 5s
-				if (gs.timer > 0 && gs.timer <= 5 && !gs.timeFrozen) {
+				// Timer urgency: pulse lights red when < 5s (or survival < 10s)
+				const urgentTimer = gs.mode === 'survival' ? gs.survivalTimer <= 10 : (gs.timer > 0 && gs.timer <= 5 && !gs.timeFrozen);
+				if (urgentTimer) {
+					timerUrgencyActive = true;
 					const pulse = 0.5 + Math.sin(time * 8) * 0.5;
 					for (const l of sceneLights) {
 						l.color.setHex(pulse > 0.5 ? 0xff2200 : THEMES[settingsState.themeIdx].primary);
 						l.intensity = 0.5 + pulse * 0.8;
+					}
+					if (gs.mode === 'survival') sfxTimerWarning();
+				} else if (timerUrgencyActive) {
+					timerUrgencyActive = false;
+					const theme = THEMES[settingsState.themeIdx];
+					for (const l of sceneLights) {
+						l.color.setHex(theme.primary);
+						l.intensity = 0.5;
 					}
 				}
 				if (gs.timer <= 0) {

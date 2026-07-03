@@ -28,11 +28,12 @@ A neon-lit holographic trivia game built for WebXR and browser. Test your knowle
 
 ### Progression & Rewards
 - **XP & Leveling** system with combo multipliers
-- **40 achievements** with persistent tracking and golden unlock notifications
-- **Top-15 leaderboard** with mode filtering (All / Classic / Challenge)
+- **50 achievements** with persistent tracking and golden unlock notifications
+- **Top-15 leaderboard** with mode filtering (All / Classic / Challenge / Endless / Speed)
 - **Career stats** dashboard with per-category and per-difficulty accuracy
 - **Game history** tracking (last 20 games)
 - **Daily streak** tracking
+- **Level progress** tracking on title and game over screens
 
 ### Gameplay Features
 - **3 lifelines**: 50:50, Skip, Hint
@@ -43,10 +44,16 @@ A neon-lit holographic trivia game built for WebXR and browser. Test your knowle
 - **6 neon themes**: Holodeck, Crimson, Toxic, Ultraviolet, Solar, Arctic
 
 ### Visual & Audio
+- **Procedural audio system** (Web Audio API tone synthesis)
+  - Correct answer ding, wrong answer buzz, timer tick
+  - Streak fanfare, achievement fanfare, game over chord
+  - Menu click, countdown beeps, GO! tone
+  - All sounds respect Master Volume × SFX Volume settings
 - **3D holodeck environment** with wireframe decorations, particle effects, fog, and neon grids
 - **Animated torus ring** with dynamic rotation
 - **4 orbiting point lights** with varying heights
 - **250 atmospheric particles** with additive blending
+- **Timer urgency effects** — pulsing red lights and tick sounds when timer < 5 seconds
 - **Holographic panel float** — subtle sine-wave oscillation on menu panels
 - **Achievement notification overlays** with golden styling
 - **Trail particle effects** on combo streaks
@@ -77,7 +84,7 @@ A neon-lit holographic trivia game built for WebXR and browser. Test your knowle
 
 - **IWSDK** 0.4.x — Immersive Web SDK (Meta's WebXR framework)
 - **TypeScript** — Fully typed, zero `as any` casts
-- **PanelUI / UIKitML** — All 19 spatial UI panels, zero HTML DOM overlays
+- **PanelUI / UIKitML** — All 18 spatial UI panels, zero HTML DOM overlays
 - **Vite** — Build tooling with UIKitML plugin
 - **localStorage** — Persistent stats, achievements, leaderboard, settings
 

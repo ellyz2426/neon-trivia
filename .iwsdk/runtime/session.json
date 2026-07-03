@@ -14,14 +14,14 @@
     "connected": false,
     "commandReady": false,
     "connectedClientCount": 0,
-    "lastTransitionAt": "2026-07-03T10:04:37.673Z",
-    "lastBridgeConnectedAt": "2026-07-03T10:04:24.409Z",
+    "lastTransitionAt": "2026-07-03T10:06:44.374Z",
+    "lastBridgeConnectedAt": "2026-07-03T10:06:28.209Z",
     "lastError": {
       "cause": "connection_lost",
       "message": "Managed browser runtime disconnected from the MCP bridge.",
-      "at": "2026-07-03T10:04:37.673Z"
+      "at": "2026-07-03T10:06:44.374Z"
     }
   },
   "registeredAt": "2026-07-03T08:36:09.819Z",
-  "updatedAt": "2026-07-03T10:04:37.677Z"
+  "updatedAt": "2026-07-03T10:06:44.393Z"
 }
