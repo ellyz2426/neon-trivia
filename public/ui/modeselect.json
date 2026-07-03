@@ -21,7 +21,7 @@
         "type": "custom",
         "children": [],
         "properties": {
-          "height": "4"
+          "height": "2"
         },
         "dataUid": "uid-3"
       },
@@ -33,10 +33,10 @@
         ],
         "properties": {
           "name": "btn-classic",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#00ffff",
           "backgroundColor": "#003355",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
@@ -52,10 +52,10 @@
         ],
         "properties": {
           "name": "btn-speed",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#ff8866",
           "backgroundColor": "#331100",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
@@ -71,10 +71,10 @@
         ],
         "properties": {
           "name": "btn-streak",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#ffcc00",
           "backgroundColor": "#333300",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
@@ -90,10 +90,10 @@
         ],
         "properties": {
           "name": "btn-category",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#66ff66",
           "backgroundColor": "#003300",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
@@ -109,10 +109,10 @@
         ],
         "properties": {
           "name": "btn-daily",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#cc88ff",
           "backgroundColor": "#330055",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
@@ -128,10 +128,10 @@
         ],
         "properties": {
           "name": "btn-blitz",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#ff66cc",
           "backgroundColor": "#330033",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
@@ -147,10 +147,10 @@
         ],
         "properties": {
           "name": "btn-marathon",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#66ccff",
           "backgroundColor": "#002244",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
@@ -166,16 +166,35 @@
         ],
         "properties": {
           "name": "btn-practice",
-          "fontSize": "18",
+          "fontSize": "17",
           "color": "#888888",
           "backgroundColor": "#222222",
-          "padding": "8",
+          "padding": "7",
           "borderRadius": "6",
           "width": "280",
           "textAlign": "center",
           "hoverColor": "#444444"
         },
         "dataUid": "uid-11"
+      },
+      {
+        "sourceTag": "text",
+        "type": "custom",
+        "children": [
+          "CHALLENGE (vs AI)"
+        ],
+        "properties": {
+          "name": "btn-challenge",
+          "fontSize": "17",
+          "color": "#ff4466",
+          "backgroundColor": "#440022",
+          "padding": "7",
+          "borderRadius": "6",
+          "width": "280",
+          "textAlign": "center",
+          "hoverColor": "#660033"
+        },
+        "dataUid": "uid-12"
       },
       {
         "sourceTag": "text",
@@ -194,12 +213,12 @@
           "textAlign": "center",
           "hoverColor": "#550000"
         },
-        "dataUid": "uid-12"
+        "dataUid": "uid-13"
       }
     ],
     "properties": {
       "width": "420",
-      "height": "520",
+      "height": "560",
       "backgroundColor": "#0a0a2a",
       "borderRadius": "12",
       "padding": "16",
@@ -217,7 +236,7 @@
         "column": 0
       },
       "end": {
-        "line": 12,
+        "line": 13,
         "column": 8
       }
     },
@@ -328,6 +347,16 @@
       },
       "end": {
         "line": 11,
+        "column": 195
+      }
+    },
+    "uid-13": {
+      "start": {
+        "line": 12,
+        "column": 2
+      },
+      "end": {
+        "line": 12,
         "column": 177
       }
     }

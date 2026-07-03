@@ -50,6 +50,11 @@ interface TriviaQuestion {
 	hint: string;
 }
 
+interface DifficultyRecord {
+	correct: number;
+	total: number;
+}
+
 interface GameStats {
 	gamesPlayed: number;
 	totalScore: number;
@@ -65,6 +70,7 @@ interface GameStats {
 	categoryGames: number[];
 	categoryCorrect: number[];
 	categoryTotal: number[];
+	difficultyStats: { easy: DifficultyRecord; medium: DifficultyRecord; hard: DifficultyRecord };
 }
 
 interface LeaderboardEntry {
@@ -80,7 +86,7 @@ interface AchDef {
 	check: (s: GameStats, g: GameState) => boolean;
 }
 
-type GameMode = 'classic' | 'speed' | 'streak' | 'category' | 'daily' | 'blitz' | 'marathon' | 'practice';
+type GameMode = 'classic' | 'speed' | 'streak' | 'category' | 'daily' | 'blitz' | 'marathon' | 'practice' | 'challenge';
 type Difficulty = 'easy' | 'medium' | 'hard';
 type Screen = 'title' | 'modeselect' | 'catpick' | 'difficulty' | 'countdown' | 'playing' | 'pause' | 'gameover' | 'achvlist' | 'stats' | 'settings' | 'leaderboard' | 'help' | 'review';
 
@@ -109,6 +115,8 @@ interface GameState {
 	gameStartTime: number;
 	elapsedTime: number;
 	xpGained: number;
+	aiScore: number;
+	aiCorrect: number;
 }
 
 // ============================================================
@@ -131,7 +139,7 @@ const THEMES = [
 
 const MODE_QUESTION_COUNT: Record<GameMode, number> = {
 	classic: 20, speed: 999, streak: 999, category: 20,
-	daily: 20, blitz: 999, marathon: 50, practice: 20,
+	daily: 20, blitz: 999, marathon: 50, practice: 20, challenge: 20,
 };
 
 const DIFF_TIMERS: Record<Difficulty, number> = { easy: 30, medium: 20, hard: 15 };
@@ -153,10 +161,11 @@ const PANEL_CONFIGS: Record<string, { config: string; y: number; z: number }> = 
 	countdown: { config: './ui/countdown.json', y: 0.2, z: -1.0 },
 	toast: { config: './ui/toast.json', y: 0.45, z: -1.0 },
 	help: { config: './ui/help.json', y: 0.1, z: -1.5 },
+	review: { config: './ui/review.json', y: 0.1, z: -1.5 },
 };
 
 // ============================================================
-// QUESTION BANK — 210 questions (21 per category)
+// QUESTION BANK — 400 questions (40 per category)
 // ============================================================
 
 function qb(c: number, d: 'easy' | 'medium' | 'hard', text: string, a: [string, string, string, string], r: number, h: string): TriviaQuestion {
@@ -507,6 +516,130 @@ const QUESTIONS: TriviaQuestion[] = [
 	qb(9,'medium','What element does the chemical symbol Fe represent?',['Iron','Lead','Fluorine','Francium'],0,'Latin: ferrum'),
 	qb(9,'hard','What is the SI unit of electric current?',['Ampere','Volt','Watt','Ohm'],0,'Named after Andre-Marie Ampere'),
 	qb(9,'hard','What logical fallacy assumes a chain of events from one action?',['Slippery slope','Ad hominem','Straw man','False dilemma'],0,'If A then B then C then catastrophe'),
+
+	// ============================================================
+	// ROUND 4 QUESTIONS — 100 additional (10 per category, total 400)
+	// ============================================================
+
+	// ---- 0: Science (10 more) ----
+	qb(0,'easy','What is the hardest natural mineral?',['Diamond','Ruby','Sapphire','Topaz'],0,'10 on the Mohs scale'),
+	qb(0,'easy','Which planet is famous for its rings?',['Saturn','Jupiter','Uranus','Neptune'],0,'Visible with a small telescope'),
+	qb(0,'medium','What unit measures electrical resistance?',['Ohm','Watt','Ampere','Volt'],0,'Named after Georg Simon'),
+	qb(0,'medium','What type of cell fights infection in the body?',['White blood cell','Red blood cell','Platelet','Stem cell'],0,'Part of the immune system'),
+	qb(0,'hard','What is the triple point of water?',['0.01 degrees C at 611.73 Pa','0 degrees C at 1 atm','100 degrees C at 1 atm','50 degrees C at 500 Pa'],0,'All three phases coexist'),
+	qb(0,'easy','What type of animal is a frog?',['Amphibian','Reptile','Mammal','Fish'],0,'Lives on land and water'),
+	qb(0,'medium','What is the process by which rocks break down over time?',['Weathering','Erosion','Sedimentation','Metamorphism'],0,'Physical or chemical breakdown'),
+	qb(0,'hard','What particle was discovered at CERN in 2012?',['Higgs boson','Graviton','Tachyon','Gluon'],0,'The so-called God particle'),
+	qb(0,'medium','What is the most common blood type?',['O positive','A positive','B positive','AB positive'],0,'About 38 percent of people'),
+	qb(0,'hard','What is the study of fungi called?',['Mycology','Botany','Virology','Entomology'],0,'Mushrooms, molds, and yeasts'),
+
+	// ---- 1: History (10 more) ----
+	qb(1,'easy','Which country built the Great Wall?',['China','Japan','India','Mongolia'],0,'Over 13,000 miles long'),
+	qb(1,'easy','What ancient civilization used hieroglyphs?',['Egyptian','Greek','Roman','Persian'],0,'Picture-based writing system'),
+	qb(1,'medium','Who was the first Emperor of China?',['Qin Shi Huang','Kublai Khan','Sun Yat-sen','Confucius'],0,'Unified China around 221 BC'),
+	qb(1,'medium','In what century did the Renaissance begin?',['14th century','12th century','16th century','10th century'],0,'Starting in Italy, Florence'),
+	qb(1,'hard','What was the Code of Hammurabi?',['An ancient legal code','A religious text','A military manual','A trade agreement'],0,'Babylonian, one of the earliest law codes'),
+	qb(1,'easy','Who was known as the Liberator of South America?',['Simon Bolivar','Che Guevara','Hernan Cortes','Francisco Pizarro'],0,'Freed several nations from Spain'),
+	qb(1,'medium','What treaty ended World War I?',['Treaty of Versailles','Treaty of Paris','Treaty of Ghent','Treaty of Tordesillas'],0,'Signed June 28, 1919'),
+	qb(1,'hard','Which civilization invented the wheel?',['Mesopotamians','Egyptians','Greeks','Chinese'],0,'Around 3500 BC in Sumer'),
+	qb(1,'medium','Who was the first woman to fly solo across the Atlantic?',['Amelia Earhart','Harriet Quimby','Bessie Coleman','Jacqueline Cochran'],0,'In 1932, from Newfoundland to Ireland'),
+	qb(1,'hard','What was the Silk Road?',['An ancient trade network','A river','A battle','A type of fabric'],0,'Connected East and West for centuries'),
+
+	// ---- 2: Geography (10 more) ----
+	qb(2,'easy','Which continent is known as the Land Down Under?',['Australia','South America','Africa','Antarctica'],0,'Also a country'),
+	qb(2,'easy','What ocean lies between the Americas and Europe?',['Atlantic','Pacific','Indian','Arctic'],0,'Second largest ocean'),
+	qb(2,'medium','What is the longest mountain range on land?',['Andes','Himalayas','Rocky Mountains','Alps'],0,'Along western South America'),
+	qb(2,'medium','Which African country has the largest population?',['Nigeria','Ethiopia','Egypt','South Africa'],0,'Most populous in Africa'),
+	qb(2,'hard','What is the tallest mountain measured from base to peak?',['Mauna Kea','Mount Everest','K2','Denali'],0,'Mostly underwater in Hawaii'),
+	qb(2,'easy','What is the capital of Germany?',['Berlin','Munich','Frankfurt','Hamburg'],0,'Reunited in 1990'),
+	qb(2,'medium','Which country is shaped like a boot?',['Italy','Chile','Norway','New Zealand'],0,'Mediterranean peninsula'),
+	qb(2,'hard','What is the most isolated inhabited island?',['Tristan da Cunha','Easter Island','Pitcairn Island','Bouvet Island'],0,'In the South Atlantic, under 300 people'),
+	qb(2,'medium','Which river runs through Cairo?',['Nile','Tigris','Euphrates','Congo'],0,'Longest river in Africa'),
+	qb(2,'hard','What country has the most time zones including overseas?',['France','Russia','United States','United Kingdom'],0,'12 time zones including territories'),
+
+	// ---- 3: Entertainment (10 more) ----
+	qb(3,'easy','What is the name of Batman\'s butler?',['Alfred','Jarvis','Watson','Hudson'],0,'Alfred Pennyworth'),
+	qb(3,'easy','Who voices Woody in Toy Story?',['Tom Hanks','Tim Allen','Billy Crystal','Robin Williams'],0,'Also starred in Forrest Gump'),
+	qb(3,'medium','What band wrote the song Hotel California?',['Eagles','Fleetwood Mac','Led Zeppelin','The Rolling Stones'],0,'Released in 1977'),
+	qb(3,'medium','What fictional wizard school does Harry Potter attend?',['Hogwarts','Beauxbatons','Durmstrang','Ilvermorny'],0,'In Scotland'),
+	qb(3,'hard','What year was the first Academy Awards ceremony?',['1929','1935','1920','1942'],0,'Held at the Hollywood Roosevelt Hotel'),
+	qb(3,'easy','What color is Shrek?',['Green','Blue','Red','Purple'],0,'An ogre'),
+	qb(3,'medium','Which composer wrote the Moonlight Sonata?',['Beethoven','Mozart','Chopin','Bach'],0,'Piano Sonata No. 14'),
+	qb(3,'hard','What is the longest-running animated TV show?',['The Simpsons','South Park','Family Guy','SpongeBob SquarePants'],0,'Debuted in 1989'),
+	qb(3,'medium','In The Matrix, what color pill does Neo take?',['Red','Blue','Green','White'],0,'To see how deep the rabbit hole goes'),
+	qb(3,'hard','Who created the character of Sherlock Holmes?',['Arthur Conan Doyle','Agatha Christie','Edgar Allan Poe','Wilkie Collins'],0,'A Scottish physician and author'),
+
+	// ---- 4: Sports (10 more) ----
+	qb(4,'easy','What sport is played at the Masters Tournament?',['Golf','Tennis','Cricket','Polo'],0,'At Augusta National'),
+	qb(4,'easy','How many innings are in a standard baseball game?',['9','7','8','10'],0,'Each team bats and fields'),
+	qb(4,'medium','What country has won the most Cricket World Cups?',['Australia','India','West Indies','England'],0,'Six titles'),
+	qb(4,'medium','In which sport do you perform a slam dunk?',['Basketball','Volleyball','Tennis','Soccer'],0,'Jumping above the rim'),
+	qb(4,'hard','What is the distance of a triathlon Ironman swim?',['2.4 miles','1 mile','3 miles','5 miles'],0,'Followed by bike and run'),
+	qb(4,'easy','What color belt is the highest rank in most martial arts?',['Black','Red','White','Gold'],0,'Represents mastery'),
+	qb(4,'medium','How many Grand Slam tennis tournaments are there per year?',['4','3','5','6'],0,'Australian, French, Wimbledon, US'),
+	qb(4,'hard','In what year were women first allowed in the Olympic Games?',['1900','1920','1896','1912'],0,'Paris Olympics'),
+	qb(4,'medium','What is the only sport played on the surface of the moon?',['Golf','Baseball','Cricket','Frisbee'],0,'By Alan Shepard in 1971'),
+	qb(4,'hard','What is a perfect score in gymnastics?',['10','100','15','50'],0,'Nadia Comaneci was the first'),
+
+	// ---- 5: Technology (10 more) ----
+	qb(5,'easy','What does URL stand for?',['Uniform Resource Locator','Universal Registry Link','Unified Resource Language','User Remote Login'],0,'Web address'),
+	qb(5,'easy','Who is the CEO of Tesla?',['Elon Musk','Jeff Bezos','Tim Cook','Sundar Pichai'],0,'Also runs SpaceX'),
+	qb(5,'medium','What does SSD stand for in computing?',['Solid State Drive','System Storage Device','Sequential Save Disk','Super Speed Drive'],0,'Faster than HDD'),
+	qb(5,'medium','What programming language was created by Oracle?',['Java','Python','C++','Ruby'],0,'Originally by Sun Microsystems'),
+	qb(5,'hard','What was the first programmable digital computer?',['Colossus','ENIAC','UNIVAC','Babbage Engine'],0,'British code-breaking, 1943'),
+	qb(5,'easy','What company makes the Galaxy smartphone?',['Samsung','Apple','Google','Huawei'],0,'South Korean electronics company'),
+	qb(5,'medium','What does IoT stand for?',['Internet of Things','Input of Technology','Internal Operating Terminal','Information over Transmission'],0,'Connected smart devices'),
+	qb(5,'hard','What algorithm is used for Bitcoin mining?',['SHA-256','RSA','AES','MD5'],0,'A cryptographic hash function'),
+	qb(5,'medium','What year was YouTube founded?',['2005','2003','2007','2009'],0,'Acquired by Google in 2006'),
+	qb(5,'hard','What does BIOS stand for?',['Basic Input Output System','Binary Internal Operating System','Base Integrated OS','Boot Initiation Output Sequence'],0,'Firmware on motherboard'),
+
+	// ---- 6: Nature (10 more) ----
+	qb(6,'easy','What is a baby kangaroo called?',['Joey','Kit','Pup','Calf'],0,'Lives in the mother\'s pouch'),
+	qb(6,'easy','How many legs does an insect have?',['6','8','4','10'],0,'Three pairs'),
+	qb(6,'medium','What is the largest species of penguin?',['Emperor penguin','King penguin','Adelie penguin','Gentoo penguin'],0,'Up to 4 feet tall in Antarctica'),
+	qb(6,'medium','Which animal is known as the king of the jungle?',['Lion','Tiger','Elephant','Gorilla'],0,'Actually lives in savannas'),
+	qb(6,'hard','What is the smallest bone in the human body?',['Stapes','Incus','Malleus','Hyoid'],0,'In the middle ear, stirrup-shaped'),
+	qb(6,'easy','What do you call a group of lions?',['Pride','Pack','Herd','Flock'],0,'Led by dominant males'),
+	qb(6,'medium','Which planet is known for its Great Red Spot?',['Jupiter','Mars','Saturn','Neptune'],0,'A massive storm'),
+	qb(6,'hard','What is the symbiotic relationship between clownfish and anemone?',['Mutualism','Parasitism','Commensalism','Predation'],0,'Both benefit from the relationship'),
+	qb(6,'medium','What type of tree produces acorns?',['Oak','Maple','Birch','Pine'],0,'Common in temperate forests'),
+	qb(6,'hard','What is the most biodiverse ecosystem on Earth?',['Coral reefs','Tropical rainforests','Wetlands','Deep sea vents'],0,'Per unit area, highest species density'),
+
+	// ---- 7: Food & Drink (10 more) ----
+	qb(7,'easy','What nut is used to make peanut butter?',['Peanut','Almond','Cashew','Walnut'],0,'Actually a legume'),
+	qb(7,'easy','What is the main ingredient in bread?',['Flour','Sugar','Butter','Eggs'],0,'Usually wheat-based'),
+	qb(7,'medium','What Italian dish features layers of pasta and cheese?',['Lasagna','Ravioli','Cannelloni','Manicotti'],0,'Baked in the oven'),
+	qb(7,'medium','Which spice comes from the bark of a tree?',['Cinnamon','Pepper','Cumin','Nutmeg'],0,'Rolled into quills or sticks'),
+	qb(7,'hard','What is the traditional Japanese drink made from fermented rice?',['Sake','Soju','Baijiu','Mead'],0,'Often served warm'),
+	qb(7,'easy','What fruit is dried to make raisins?',['Grape','Plum','Apricot','Fig'],0,'Small and sweet'),
+	qb(7,'medium','What country is Parmesan cheese originally from?',['Italy','France','Switzerland','Netherlands'],0,'From the Parma region'),
+	qb(7,'hard','What is sous vide cooking?',['Vacuum-sealed low-temp water bath','High-heat grilling','Smoke curing','Pressure cooking'],0,'French for under vacuum'),
+	qb(7,'medium','Which country is famous for croissants?',['France','Austria','Italy','Belgium'],0,'Crescent-shaped pastry'),
+	qb(7,'hard','What mineral gives red wine its dry mouthfeel?',['Tannins','Iron','Calcium','Sulfites'],0,'From grape skins, seeds, and oak'),
+
+	// ---- 8: Arts & Culture (10 more) ----
+	qb(8,'easy','What art form uses clay shaped on a wheel?',['Pottery','Sculpture','Mosaic','Weaving'],0,'Fired in a kiln'),
+	qb(8,'easy','Who wrote The Odyssey?',['Homer','Virgil','Sophocles','Plato'],0,'Ancient Greek epic poet'),
+	qb(8,'medium','What instrument does a timpanist play?',['Kettledrums','Xylophone','Cymbals','Snare drum'],0,'Large copper drums in orchestra'),
+	qb(8,'medium','What art style features geometric shapes and fragmented forms?',['Cubism','Impressionism','Romanticism','Realism'],0,'Pioneered by Picasso and Braque'),
+	qb(8,'hard','Who wrote The Divine Comedy?',['Dante Alighieri','Giovanni Boccaccio','Petrarch','Machiavelli'],0,'Inferno, Purgatorio, Paradiso'),
+	qb(8,'easy','What is the Japanese art of flower arranging?',['Ikebana','Bonsai','Origami','Kintsugi'],0,'Living flowers'),
+	qb(8,'medium','Who painted The Birth of Venus?',['Sandro Botticelli','Leonardo da Vinci','Raphael','Titian'],0,'Renaissance, Florence, goddess on a shell'),
+	qb(8,'hard','What scale is used to measure musical intervals?',['Chromatic','Richter','Beaufort','Mohs'],0,'12 semitones per octave'),
+	qb(8,'medium','What type of novel was invented by the Japanese Lady Murasaki?',['Novel','Haiku','Manga','Kabuki'],0,'The Tale of Genji, circa 1000 AD'),
+	qb(8,'hard','What is trompe-l\'oeil in art?',['Optical illusion painting','Sculpture technique','Print method','Dance form'],0,'French for deceive the eye'),
+
+	// ---- 9: General Knowledge (10 more) ----
+	qb(9,'easy','How many weeks are in a year?',['52','48','50','54'],0,'365 divided by 7'),
+	qb(9,'easy','What is the currency of the United Kingdom?',['Pound sterling','Euro','Dollar','Crown'],0,'Symbol is a stylized L'),
+	qb(9,'medium','What is the smallest prime number?',['2','1','3','0'],0,'Only even prime'),
+	qb(9,'medium','How many cards are in a standard deck?',['52','54','48','50'],0,'4 suits of 13 cards'),
+	qb(9,'hard','What is Occam\'s Razor?',['Simplest explanation is usually correct','A type of blade','A logical paradox','A math theorem'],0,'Attributed to William of Ockham'),
+	qb(9,'easy','What country is the Eiffel Tower in?',['France','Italy','Spain','Germany'],0,'In Paris'),
+	qb(9,'medium','What is the speed of sound at sea level in m/s?',['343','299','400','250'],0,'About 767 mph'),
+	qb(9,'hard','What is the Dunning-Kruger effect?',['Overestimating ability when unskilled','A physics phenomenon','A chemical reaction','A musical technique'],0,'Cognitive bias about competence'),
+	qb(9,'medium','What shape has 8 sides?',['Octagon','Hexagon','Pentagon','Decagon'],0,'Oct means eight'),
+	qb(9,'hard','What is Benford\'s Law?',['Distribution of leading digits','A physics law','A chemical rule','A musical pattern'],0,'Digit 1 appears about 30 percent'),
 ];
 
 
@@ -573,6 +706,7 @@ const defaultGameState = (): GameState => ({
 	doublePoints: 0, timeFrozen: false, hasDouble: true, hasFreeze: true,
 	results: [],
 	gameStartTime: 0, elapsedTime: 0, xpGained: 0,
+	aiScore: 0, aiCorrect: 0,
 });
 
 let gs: GameState = defaultGameState();
@@ -582,6 +716,11 @@ const defaultStats = (): GameStats => ({
 	bestStreak: 0, lifelinesUsed: 0, dailyStreak: 0, lastDailyDate: '',
 	level: 1, xp: 0, categoryGames: new Array(10).fill(0),
 	categoryCorrect: new Array(10).fill(0), categoryTotal: new Array(10).fill(0),
+	difficultyStats: {
+		easy: { correct: 0, total: 0 },
+		medium: { correct: 0, total: 0 },
+		hard: { correct: 0, total: 0 },
+	},
 });
 
 let stats: GameStats = defaultStats();
@@ -637,6 +776,11 @@ let ceilGrid: GridHelper | null = null;
 let sceneRing: Group | null = null;
 let orbitingLights: PointLight[] = [];
 
+// Trail particles for combo effects
+let trailParticleGeo: BufferGeometry | null = null;
+let trailParticleMat: PointsMaterial | null = null;
+let trailParticleSpeeds: { vx: number; vy: number; vz: number; life: number }[] = [];
+
 // ============================================================
 // UTILITY FUNCTIONS
 // ============================================================
@@ -673,6 +817,9 @@ function loadStats(): void {
 			stats = { ...defaultStats(), ...parsed };
 			if (!Array.isArray(stats.categoryGames) || stats.categoryGames.length !== 10) {
 				stats.categoryGames = new Array(10).fill(0);
+			}
+			if (!stats.difficultyStats) {
+				stats.difficultyStats = { easy: { correct: 0, total: 0 }, medium: { correct: 0, total: 0 }, hard: { correct: 0, total: 0 } };
 			}
 		}
 	} catch { /* use defaults */ }
@@ -749,6 +896,65 @@ function todayStr(): string {
 	return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function aiQuestionHash(questionText: string, seed: number): number {
+	let h = seed;
+	for (let i = 0; i < questionText.length; i++) {
+		h = (h * 31 + questionText.charCodeAt(i)) | 0;
+	}
+	return ((h >>> 0) % 100);
+}
+
+function aiAnswersCorrectly(question: TriviaQuestion, seed: number): boolean {
+	const roll = aiQuestionHash(question.question, seed);
+	const threshold = question.difficulty === 'easy' ? 85 : question.difficulty === 'medium' ? 65 : 45;
+	return roll < threshold;
+}
+
+function triggerHaptic(isCorrect: boolean, world: World): void {
+	try {
+		const rightPad = world.input.xr.gamepads.right;
+		if (rightPad) {
+			const actuator = (rightPad as any).vibrationActuator || ((rightPad as any).hapticActuators && (rightPad as any).hapticActuators[0]);
+			if (actuator && actuator.pulse) {
+				actuator.pulse(isCorrect ? 0.3 : 0.8, isCorrect ? 50 : 150);
+			}
+		}
+	} catch { /* haptics unavailable */ }
+}
+
+function triggerStreakHaptic(world: World): void {
+	try {
+		const rightPad = world.input.xr.gamepads.right;
+		if (rightPad) {
+			const actuator = (rightPad as any).vibrationActuator || ((rightPad as any).hapticActuators && (rightPad as any).hapticActuators[0]);
+			if (actuator && actuator.pulse) {
+				actuator.pulse(0.5, 50);
+				setTimeout(() => { try { actuator.pulse(0.5, 50); } catch { /* noop */ } }, 100);
+			}
+		}
+	} catch { /* haptics unavailable */ }
+}
+
+function spawnTrailParticles(): void {
+	if (!trailParticleGeo) return;
+	const pos = trailParticleGeo.getAttribute('position');
+	if (!pos) return;
+	for (let i = 0; i < 10; i++) {
+		const idx = Math.floor(Math.random() * 50);
+		const ox = (Math.random() - 0.5) * 0.6;
+		const oy = (Math.random() - 0.5) * 0.4;
+		const oz = (Math.random() - 0.5) * 0.3;
+		(pos as any).setXYZ(idx, ox, 0.3 + oy, -1.3 + oz);
+		trailParticleSpeeds[idx] = {
+			vx: (Math.random() - 0.5) * 2,
+			vy: (Math.random() - 0.5) * 1.5,
+			vz: (Math.random() - 0.5) * 1.5,
+			life: 2.0,
+		};
+	}
+	(pos as any).needsUpdate = true;
+}
+
 // ============================================================
 // PANEL SHOW / HIDE
 // ============================================================
@@ -807,6 +1013,7 @@ function showScreen(screen: Screen): void {
 			break;
 		case 'difficulty':
 			showPanel('difficulty');
+			updateDifficultyUI();
 			break;
 		case 'countdown':
 			showPanel('countdown');
@@ -998,6 +1205,23 @@ function selectAnswer(idx: number): void {
 		}
 	}
 
+	// Haptic feedback
+	if (worldRef) triggerHaptic(isCorrect, worldRef);
+
+	// Challenge mode: AI answers this question
+	if (gs.mode === 'challenge') {
+		const aiSeed = getDailySeed();
+		const aiGotIt = aiAnswersCorrectly(question, aiSeed);
+		if (aiGotIt) {
+			gs.aiCorrect++;
+			const aiPts = 100 * (question.difficulty === 'easy' ? 1 : question.difficulty === 'medium' ? 2 : 3);
+			gs.aiScore += aiPts;
+		}
+		const youIcon = isCorrect ? 'OK' : 'X';
+		const aiIcon = aiGotIt ? 'OK' : 'X';
+		showToastMsg(`You: [${youIcon}] | AI: [${aiIcon}]`, 1.5);
+	}
+
 	if (isCorrect) {
 		gs.correctCount++;
 		gs.combo++;
@@ -1006,7 +1230,9 @@ function selectAnswer(idx: number): void {
 		if (gs.streak > gs.bestStreak) gs.bestStreak = gs.streak;
 		const pts = calculateScore(question.difficulty, gs.timer, gs.combo);
 		gs.score += pts;
-		showToastMsg(`+${pts} pts! Combo x${Math.min(gs.combo, 10)}`, 1.2);
+		if (gs.mode !== 'challenge') {
+			showToastMsg(`+${pts} pts! Combo x${Math.min(gs.combo, 10)}`, 1.2);
+		}
 
 		// Visual feedback: HUD bounce
 		hudBounceTimer = 0.3;
@@ -1014,10 +1240,22 @@ function selectAnswer(idx: number): void {
 		if (hudOv) {
 			hudOv[1] = PANEL_CONFIGS['hud'].y + 0.05;
 		}
+
+		// Trail particles on combo >= 3
+		if (gs.combo >= 3) {
+			spawnTrailParticles();
+		}
+
+		// Streak milestone haptic
+		if (worldRef && (gs.streak === 5 || gs.streak === 10 || gs.streak === 25)) {
+			triggerStreakHaptic(worldRef);
+		}
 	} else {
 		gs.combo = 0;
 		gs.streak = 0;
-		showToastMsg(`Wrong! Answer: ${question.answers[question.correct]}`, 1.8);
+		if (gs.mode !== 'challenge') {
+			showToastMsg(`Wrong! Answer: ${question.answers[question.correct]}`, 1.8);
+		}
 
 		// Visual feedback: red flash on scene lights
 		wrongFlashTimer = 0.4;
@@ -1092,6 +1330,22 @@ function endGame(): void {
 		}
 	}
 
+	// Per-question category and difficulty stats tracking
+	for (let i = 0; i < gs.questions.length && i < gs.totalAnswered; i++) {
+		const q = gs.questions[i];
+		if (gs.results[i] !== undefined) {
+			// Category accuracy
+			stats.categoryTotal[q.category] = (stats.categoryTotal[q.category] || 0) + 1;
+			if (gs.results[i]) {
+				stats.categoryCorrect[q.category] = (stats.categoryCorrect[q.category] || 0) + 1;
+			}
+			// Difficulty accuracy
+			const dRec = stats.difficultyStats[q.difficulty];
+			dRec.total++;
+			if (gs.results[i]) dRec.correct++;
+		}
+	}
+
 	// Daily streak
 	if (gs.mode === 'daily') {
 		const today = todayStr();
@@ -1103,6 +1357,17 @@ function endGame(): void {
 			stats.lastDailyDate = today;
 		}
 	}
+
+	// Save game history entry
+	gameHistory.unshift({
+		mode: gs.mode.toUpperCase(),
+		score: gs.score,
+		correct: gs.correctCount,
+		total: gs.totalAnswered,
+		date: todayStr(),
+	});
+	gameHistory = gameHistory.slice(0, 20);
+	saveGameHistory();
 
 	saveStats();
 
@@ -1235,6 +1500,13 @@ function updateTitleLabels(): void {
 	if (!d) return;
 	const lvl = d.getElementById('lbl-level') as UIKit.Text;
 	lvl?.setProperties({ text: `LEVEL ${stats.level} -- ${stats.xp} XP` });
+	const ta = d.getElementById('lbl-total-answered') as UIKit.Text;
+	ta?.setProperties({ text: `Total Answered: ${stats.totalAnswers}` });
+	const bs = d.getElementById('lbl-best-score') as UIKit.Text;
+	bs?.setProperties({ text: `Best Score: ${stats.bestScore}` });
+	const dl = d.getElementById('lbl-daily') as UIKit.Text;
+	const dailyDone = stats.lastDailyDate === todayStr();
+	dl?.setProperties({ text: dailyDone ? 'Daily: COMPLETED' : 'Daily: AVAILABLE' });
 }
 
 function updateHUD(): void {
@@ -1287,9 +1559,13 @@ function updateGameOverUI(): void {
 	if (!d) return;
 	const accuracy = gs.totalAnswered > 0 ? Math.round((gs.correctCount / gs.totalAnswered) * 100) : 0;
 
-	(d.getElementById('lbl-result') as UIKit.Text)?.setProperties({
-		text: gs.correctCount > gs.totalAnswered * 0.7 ? 'GREAT JOB!' : 'GAME OVER',
-	});
+	// Challenge mode: show win/lose result
+	let resultText = gs.correctCount > gs.totalAnswered * 0.7 ? 'GREAT JOB!' : 'GAME OVER';
+	if (gs.mode === 'challenge') {
+		resultText = gs.score > gs.aiScore ? 'YOU WIN!' : gs.score < gs.aiScore ? 'AI WINS!' : 'TIE GAME!';
+	}
+
+	(d.getElementById('lbl-result') as UIKit.Text)?.setProperties({ text: resultText });
 	(d.getElementById('lbl-mode') as UIKit.Text)?.setProperties({ text: gs.mode.toUpperCase() });
 	(d.getElementById('lbl-score') as UIKit.Text)?.setProperties({ text: `Score: ${gs.score}` });
 	(d.getElementById('lbl-correct') as UIKit.Text)?.setProperties({ text: `Correct: ${gs.correctCount}/${gs.totalAnswered}` });
@@ -1298,6 +1574,26 @@ function updateGameOverUI(): void {
 	(d.getElementById('lbl-combo') as UIKit.Text)?.setProperties({ text: `Best Combo: x${gs.bestCombo}` });
 	(d.getElementById('lbl-time') as UIKit.Text)?.setProperties({ text: `Time: ${Math.floor(gs.elapsedTime)}s` });
 	(d.getElementById('lbl-xp') as UIKit.Text)?.setProperties({ text: `+${gs.xpGained} XP` });
+
+	// AI score display
+	const aiLbl = d.getElementById('lbl-ai-score') as UIKit.Text;
+	if (gs.mode === 'challenge') {
+		aiLbl?.setProperties({ text: `AI Score: ${gs.aiScore} (${gs.aiCorrect}/${gs.totalAnswered} correct)` });
+	} else {
+		aiLbl?.setProperties({ text: '' });
+	}
+
+	// Recent games
+	for (let i = 0; i < 5; i++) {
+		const el = d.getElementById(`prev${i}`) as UIKit.Text;
+		if (!el) continue;
+		if (i < gameHistory.length) {
+			const h = gameHistory[i];
+			el.setProperties({ text: `${h.mode} ${h.score}pts ${h.correct}/${h.total} ${h.date}` });
+		} else {
+			el.setProperties({ text: '' });
+		}
+	}
 }
 
 function updateAchievementsUI(): void {
@@ -1376,6 +1672,27 @@ function updateLeaderboardUI(): void {
 			el.setProperties({ text: `#${i + 1}  ${e.score}pts  ${e.mode}  ${e.name}` });
 		} else {
 			el.setProperties({ text: `#${i + 1}  ---` });
+		}
+	}
+}
+
+function updateDifficultyUI(): void {
+	const d = docs['difficulty'];
+	if (!d) return;
+	const diffs: [string, 'easy' | 'medium' | 'hard'][] = [
+		['lbl-easy-stats', 'easy'],
+		['lbl-med-stats', 'medium'],
+		['lbl-hard-stats', 'hard'],
+	];
+	for (const [id, diff] of diffs) {
+		const el = d.getElementById(id) as UIKit.Text;
+		if (!el) continue;
+		const rec = stats.difficultyStats[diff];
+		if (rec.total > 0) {
+			const pct = Math.round((rec.correct / rec.total) * 100);
+			el.setProperties({ text: `${diff.charAt(0).toUpperCase() + diff.slice(1)}: ${pct}% (${rec.correct}/${rec.total})` });
+		} else {
+			el.setProperties({ text: `${diff.charAt(0).toUpperCase() + diff.slice(1)}: No data yet` });
 		}
 	}
 }
@@ -1551,6 +1868,47 @@ function setupScene(): void {
 	const platLines = new LineSegments(platEdges, platMat);
 	platLines.position.set(0, 0.5, -1.3);
 	scene.add(platLines);
+
+	// Animated torus ring
+	const ringGeo = new TorusGeometry(1.0, 0.04, 16, 48);
+	const ringEdges = new EdgesGeometry(ringGeo);
+	const ringMat = new LineBasicMaterial({ color: theme.primary, transparent: true, opacity: 0.5 });
+	wireMats.push(ringMat);
+	const ringLines = new LineSegments(ringEdges, ringMat);
+	sceneRing = new Group();
+	sceneRing.add(ringLines);
+	sceneRing.position.set(0, 2.5, -3);
+	scene.add(sceneRing);
+
+	// Orbiting point lights (4)
+	for (let i = 0; i < 4; i++) {
+		const opl = new PointLight(theme.primary, 0.4, 15);
+		scene.add(opl);
+		orbitingLights.push(opl);
+	}
+
+	// Trail particle system (50 particles, initially hidden at Y=-100)
+	const trailCount = 50;
+	const trailPositions = new Float32Array(trailCount * 3);
+	trailParticleSpeeds = [];
+	for (let i = 0; i < trailCount; i++) {
+		trailPositions[i * 3] = 0;
+		trailPositions[i * 3 + 1] = -100;
+		trailPositions[i * 3 + 2] = 0;
+		trailParticleSpeeds.push({ vx: 0, vy: 0, vz: 0, life: 0 });
+	}
+	trailParticleGeo = new BufferGeometry();
+	trailParticleGeo.setAttribute('position', new Float32BufferAttribute(trailPositions, 3));
+	trailParticleMat = new PointsMaterial({
+		color: 0xffcc00,
+		size: 0.08,
+		transparent: true,
+		opacity: 0.8,
+		blending: AdditiveBlending,
+		depthWrite: false,
+	});
+	const trailPoints = new Points(trailParticleGeo, trailParticleMat);
+	scene.add(trailPoints);
 }
 
 // ============================================================
@@ -1574,6 +1932,7 @@ class TriviaSystem extends createSystem({
 	uiCountdown: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/countdown.json')] },
 	uiToast: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/toast.json')] },
 	uiHelp: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/help.json')] },
+	uiReview: { required: [PanelUI, PanelDocument], where: [eq(PanelUI, 'config', './ui/review.json')] },
 }) {
 	private selectedMode: GameMode = 'classic';
 	private selectedCategory = -1;
@@ -1613,6 +1972,11 @@ class TriviaSystem extends createSystem({
 					}
 				} });
 			}
+			// Challenge mode button
+			(doc.getElementById('btn-challenge') as UIKit.Text)?.setProperties({ onClick: () => {
+				this.selectedMode = 'challenge';
+				showScreen('difficulty');
+			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
 		});
 
@@ -1793,6 +2157,23 @@ class TriviaSystem extends createSystem({
 			docs['help'] = doc;
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
 		});
+
+		// ---- Review ----
+		this.queries.uiReview.subscribe('qualify', (entity: any) => {
+			const doc = entity.getValue(PanelDocument, 'document') as UIKitDocument;
+			docs['review'] = doc;
+			(doc.getElementById('btn-prev-page') as UIKit.Text)?.setProperties({ onClick: () => {
+				reviewPage = Math.max(0, reviewPage - 1);
+				updateReviewUI();
+			} });
+			(doc.getElementById('btn-next-page') as UIKit.Text)?.setProperties({ onClick: () => {
+				const answeredCount = gs.results.filter(r => r !== undefined).length;
+				const maxPage = Math.max(0, Math.ceil(answeredCount / 8) - 1);
+				reviewPage = Math.min(maxPage, reviewPage + 1);
+				updateReviewUI();
+			} });
+			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('gameover') });
+		});
 	}
 
 	update(delta: number, time: number) {
@@ -1846,7 +2227,7 @@ class TriviaSystem extends createSystem({
 				}
 				updateHUD();
 			} else if (gs.mode !== 'practice' && gs.mode !== 'streak') {
-				gs.timer -= delta;
+				if (!gs.timeFrozen) gs.timer -= delta;
 				if (gs.timer <= 0) {
 					gs.timer = 0;
 					// Time ran out for this question — treat as wrong
@@ -1917,6 +2298,29 @@ class TriviaSystem extends createSystem({
 					(pos as any).setX(i, x);
 				}
 				(pos as any).needsUpdate = true;
+			}
+		}
+
+		// ---- Animate trail particles ----
+		if (trailParticleGeo) {
+			const tPos = trailParticleGeo.getAttribute('position');
+			if (tPos) {
+				let anyActive = false;
+				for (let i = 0; i < trailParticleSpeeds.length; i++) {
+					const sp = trailParticleSpeeds[i];
+					if (sp.life > 0) {
+						anyActive = true;
+						sp.life -= delta;
+						const cx = (tPos as any).getX(i) + sp.vx * delta;
+						const cy = (tPos as any).getY(i) + sp.vy * delta;
+						const cz = (tPos as any).getZ(i) + sp.vz * delta;
+						(tPos as any).setXYZ(i, cx, cy, cz);
+						if (sp.life <= 0) {
+							(tPos as any).setY(i, -100);
+						}
+					}
+				}
+				if (anyActive) (tPos as any).needsUpdate = true;
 			}
 		}
 

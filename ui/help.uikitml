@@ -1,18 +1,19 @@
-<panel width="500" height="460" background-color="#0a0a2a" border-radius="12" padding="12" gap="4" flex-direction="column" align-items="center">
+<panel width="500" height="540" background-color="#0a0a2a" border-radius="12" padding="12" gap="3" flex-direction="column" align-items="center">
   <text font-size="22" color="#ff8866" font-weight="bold">HOW TO PLAY</text>
-  <container height="4"></container>
+  <container height="2"></container>
   <text font-size="13" color="#ffffff">Answer multiple-choice trivia questions!</text>
   <text font-size="13" color="#ffffff">Earn points for correct answers.</text>
   <text font-size="13" color="#ffffff">Faster answers = more bonus points.</text>
   <container height="4"></container>
   <text font-size="14" color="#00ffff" font-weight="bold">BROWSER CONTROLS</text>
-  <text font-size="12" color="#cccccc">1/2/3/4 - Select answer A/B/C/D</text>
-  <text font-size="12" color="#cccccc">F - Use 50:50 | S - Skip | H - Hint</text>
-  <text font-size="12" color="#cccccc">ESC/P - Pause | R - Rematch</text>
+  <text font-size="11" color="#cccccc">1/2/3/4 - Select answer A/B/C/D</text>
+  <text font-size="11" color="#cccccc">F - 50:50 | S - Skip | H - Hint</text>
+  <text font-size="11" color="#cccccc">D - Double Points | T - Time Freeze</text>
+  <text font-size="11" color="#cccccc">P/Esc - Pause</text>
   <container height="4"></container>
   <text font-size="14" color="#00ffff" font-weight="bold">VR CONTROLS</text>
-  <text font-size="12" color="#cccccc">Laser pointer - Select answer</text>
-  <text font-size="12" color="#cccccc">B - Pause</text>
+  <text font-size="11" color="#cccccc">Trigger - Select answer</text>
+  <text font-size="11" color="#cccccc">B - Pause | A - Double Points</text>
   <container height="4"></container>
   <text font-size="14" color="#ffcc00" font-weight="bold">MODES</text>
   <text font-size="11" color="#cccccc">Classic: 20 questions, timed</text>
@@ -23,11 +24,14 @@
   <text font-size="11" color="#cccccc">Blitz: 10s per question</text>
   <text font-size="11" color="#cccccc">Marathon: 50 questions</text>
   <text font-size="11" color="#cccccc">Practice: No timer, no pressure</text>
+  <text font-size="11" color="#ff4466">Challenge: Race against AI opponent</text>
   <container height="4"></container>
-  <text font-size="14" color="#66ff66" font-weight="bold">LIFELINES</text>
+  <text font-size="14" color="#66ff66" font-weight="bold">LIFELINES AND POWER-UPS</text>
   <text font-size="11" color="#cccccc">50:50 - Remove two wrong answers</text>
   <text font-size="11" color="#cccccc">Skip - Skip to next question</text>
   <text font-size="11" color="#cccccc">Hint - Reveal a clue</text>
-  <container height="6"></container>
+  <text font-size="11" color="#cccccc">2X PTS - Double points for 3 Qs</text>
+  <text font-size="11" color="#cccccc">FREEZE - Pause timer for 1 question</text>
+  <container height="4"></container>
   <text name="btn-back" font-size="16" color="#ff4444" background-color="#330000" padding="6" border-radius="6" width="140" text-align="center" hover-color="#550000">BACK</text>
 </panel>
