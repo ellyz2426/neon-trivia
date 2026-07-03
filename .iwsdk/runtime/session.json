@@ -1,8 +1,8 @@
 {
   "schemaVersion": 2,
-  "sessionId": "51862dda-310c-4ab2-9eaa-5b0420dd9a3c",
+  "sessionId": "bd99bbb0-e1dd-4704-b8a3-e7538feb9ec7",
   "workspaceRoot": "/home/hatch/workspace/neon-trivia",
-  "pid": 30959,
+  "pid": 36256,
   "port": 5173,
   "localUrl": "http://localhost:5173/",
   "networkUrls": [
@@ -14,9 +14,9 @@
     "connected": true,
     "commandReady": false,
     "connectedClientCount": 1,
-    "lastTransitionAt": "2026-07-03T08:36:14.609Z",
-    "lastBridgeConnectedAt": "2026-07-03T08:36:14.609Z"
+    "lastTransitionAt": "2026-07-03T09:09:49.265Z",
+    "lastBridgeConnectedAt": "2026-07-03T09:09:49.265Z"
   },
   "registeredAt": "2026-07-03T08:36:09.819Z",
-  "updatedAt": "2026-07-03T08:36:14.616Z"
+  "updatedAt": "2026-07-03T09:09:49.267Z"
 }

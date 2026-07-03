@@ -119,6 +119,7 @@ const THEMES = [
 	{ name: 'TOXIC', primary: 0x00ff44, secondary: 0x004411, bg: 0x001100, fog: 0x001100 },
 	{ name: 'ULTRAVIOLET', primary: 0xaa00ff, secondary: 0x330044, bg: 0x0a000f, fog: 0x0a000f },
 	{ name: 'SOLAR', primary: 0xff8800, secondary: 0x442200, bg: 0x110800, fog: 0x110800 },
+	{ name: 'ARCTIC', primary: 0xccffff, secondary: 0x446688, bg: 0x0a0a12, fog: 0x0a0a12 },
 ];
 
 const MODE_QUESTION_COUNT: Record<GameMode, number> = {
@@ -385,6 +386,120 @@ const QUESTIONS: TriviaQuestion[] = [
 	qb(9,'hard','Golden ratio is approximately?',['1.618','2.718','3.141','1.414'],0,'Greek letter phi'),
 	qb(9,'medium','Mixing all primary colors of light gives?',['White','Black','Brown','Gray'],0,'Additive color mixing'),
 	qb(9,'hard','Fallacy attacking the person not the argument?',['Ad hominem','Straw man','Red herring','Slippery slope'],0,'Latin: to the person'),
+
+	// ============================================================
+	// ROUND 2 QUESTIONS — 90 additional (9 per category, total 300)
+	// ============================================================
+
+	// ---- 0: Science (additional) ----
+	qb(0,'easy','What is the nearest star to Earth besides the Sun?',['Proxima Centauri','Sirius','Alpha Centauri A','Betelgeuse'],0,'About 4.24 light-years away'),
+	qb(0,'easy','What gas makes up about 78% of Earth\'s atmosphere?',['Nitrogen','Oxygen','Carbon dioxide','Argon'],0,'Symbol N, atomic number 7'),
+	qb(0,'medium','What planet is known as the Red Planet?',['Mars','Venus','Jupiter','Saturn'],0,'Named after Roman god of war'),
+	qb(0,'medium','What type of chemical bond involves sharing electrons?',['Covalent','Ionic','Metallic','Hydrogen'],0,'Common in organic molecules'),
+	qb(0,'hard','What is the most abundant protein in the human body?',['Collagen','Keratin','Hemoglobin','Myosin'],0,'Found in skin and connective tissue'),
+	qb(0,'easy','What is the freezing point of water in Fahrenheit?',['32','0','100','212'],0,'Below this, ice forms'),
+	qb(0,'hard','What subatomic particle carries the strong nuclear force?',['Gluon','Photon','W boson','Graviton'],0,'Holds quarks together'),
+	qb(0,'medium','What organ produces insulin in the body?',['Pancreas','Liver','Kidney','Thyroid'],0,'Located behind the stomach'),
+	qb(0,'hard','What is the Doppler effect?',['Change in wave frequency due to motion','Light bending around objects','Sound echoing in caves','Heat transfer through radiation'],0,'Why ambulance sirens change pitch'),
+
+	// ---- 1: History (additional) ----
+	qb(1,'easy','Which ancient city was famous for its Hanging Gardens?',['Babylon','Athens','Rome','Alexandria'],0,'One of the Seven Wonders'),
+	qb(1,'easy','Who was the first person to walk on the Moon?',['Neil Armstrong','Buzz Aldrin','John Glenn','Yuri Gagarin'],0,'One small step for man'),
+	qb(1,'medium','What war was fought from 1950 to 1953 in Asia?',['Korean War','Vietnam War','Sino-Japanese War','Malayan Emergency'],0,'North vs South, 38th parallel'),
+	qb(1,'medium','Who was the first female Prime Minister of the UK?',['Margaret Thatcher','Theresa May','Tony Blair','Elizabeth II'],0,'The Iron Lady'),
+	qb(1,'hard','Approximately what year was Gutenberg\'s printing press invented?',['1440','1500','1380','1520'],0,'Movable type in Mainz, Germany'),
+	qb(1,'hard','Which empire built Machu Picchu?',['Inca','Aztec','Maya','Olmec'],0,'High in the Andes of Peru'),
+	qb(1,'easy','What document declared American independence from Britain?',['Declaration of Independence','Constitution','Bill of Rights','Magna Carta'],0,'Adopted July 4, 1776'),
+	qb(1,'medium','Who led India\'s nonviolent independence movement?',['Mahatma Gandhi','Jawaharlal Nehru','Subhas Chandra Bose','B.R. Ambedkar'],0,'Father of the Nation'),
+	qb(1,'hard','What was the Byzantine Empire also known as?',['Eastern Roman Empire','Holy Roman Empire','Ottoman Empire','Seljuk Empire'],0,'Capital at Constantinople'),
+
+	// ---- 2: Geography (additional) ----
+	qb(2,'easy','What is the largest country in the world by area?',['Russia','Canada','China','United States'],0,'Spans two continents'),
+	qb(2,'easy','On which continent is the Amazon Rainforest?',['South America','Africa','Asia','Australia'],0,'Brazil holds the majority'),
+	qb(2,'medium','What is the highest mountain in Africa?',['Mount Kilimanjaro','Mount Kenya','Atlas Mountains','Drakensberg'],0,'In Tanzania, a stratovolcano'),
+	qb(2,'medium','Which river flows through London?',['Thames','Seine','Danube','Rhine'],0,'About 215 miles long'),
+	qb(2,'hard','Which country has the most active volcanoes?',['Indonesia','Japan','Iceland','Philippines'],0,'Part of the Ring of Fire'),
+	qb(2,'easy','What is the capital of France?',['Paris','Lyon','Marseille','Nice'],0,'City of Light'),
+	qb(2,'medium','What sea separates Africa from Europe?',['Mediterranean Sea','Red Sea','Black Sea','Adriatic Sea'],0,'Latin for middle of the earth'),
+	qb(2,'hard','What is often considered the driest non-polar desert?',['Atacama','Sahara','Gobi','Namib'],0,'In Chile, some areas have never recorded rain'),
+	qb(2,'hard','What is the world\'s largest landlocked country?',['Kazakhstan','Mongolia','Chad','Mali'],0,'In Central Asia, formerly Soviet'),
+
+	// ---- 3: Entertainment (additional) ----
+	qb(3,'easy','What animated film features sisters Elsa and Anna?',['Frozen','Tangled','Moana','Brave'],0,'Let it go'),
+	qb(3,'easy','Who played Iron Man in the Marvel Cinematic Universe?',['Robert Downey Jr.','Chris Evans','Chris Hemsworth','Mark Ruffalo'],0,'Genius, billionaire, philanthropist'),
+	qb(3,'medium','What streaming service originally produced Stranger Things?',['Netflix','Hulu','Amazon Prime','Disney+'],0,'Launched in 2016'),
+	qb(3,'medium','Who is known as the King of Pop?',['Michael Jackson','Elvis Presley','Prince','Stevie Wonder'],0,'Thriller, Billie Jean'),
+	qb(3,'hard','What was the first Pixar feature film?',['Toy Story','A Bug\'s Life','Finding Nemo','Monsters Inc.'],0,'Released 1995, Buzz and Woody'),
+	qb(3,'hard','Who directed The Godfather?',['Francis Ford Coppola','Martin Scorsese','Brian De Palma','Ridley Scott'],0,'An offer you can\'t refuse'),
+	qb(3,'easy','What planet does Superman come from?',['Krypton','Mars','Vulcan','Asgard'],0,'Destroyed, last son'),
+	qb(3,'medium','In which city is the TV show Friends set?',['New York City','Los Angeles','Chicago','Boston'],0,'Central Perk coffee shop'),
+	qb(3,'hard','Who composed the score for the original Star Wars trilogy?',['John Williams','Hans Zimmer','Howard Shore','Ennio Morricone'],0,'Also scored Jaws and Indiana Jones'),
+
+	// ---- 4: Sports (additional) ----
+	qb(4,'easy','How many players per basketball team are on the court?',['5','6','4','7'],0,'Ten total from both teams'),
+	qb(4,'easy','Which country hosts the Tour de France?',['France','Italy','Spain','Belgium'],0,'Three-week cycling race'),
+	qb(4,'medium','What is the national sport of Japan?',['Sumo wrestling','Judo','Karate','Baseball'],0,'Ancient tradition, yokozuna rank'),
+	qb(4,'medium','How long is a marathon in miles (approximately)?',['26.2','25','30','22'],0,'Based on Greek legend'),
+	qb(4,'hard','Who holds the men\'s 100m sprint world record?',['Usain Bolt','Tyson Gay','Yohan Blake','Justin Gatlin'],0,'9.58 seconds in Berlin 2009'),
+	qb(4,'hard','What sport has been played on the Moon?',['Golf','Baseball','Tennis','Soccer'],0,'Alan Shepard, Apollo 14, 1971'),
+	qb(4,'easy','Which sport uses a puck?',['Ice hockey','Field hockey','Lacrosse','Curling'],0,'Played on ice with sticks'),
+	qb(4,'medium','How many sets must a player win in a men\'s Grand Slam match?',['3 out of 5','2 out of 3','4 out of 7','3 out of 3'],0,'Best of five'),
+	qb(4,'hard','Where were the original ancient Olympic Games held?',['Olympia, Greece','Athens, Greece','Sparta, Greece','Delphi, Greece'],0,'Started around 776 BC'),
+
+	// ---- 5: Technology (additional) ----
+	qb(5,'easy','What does RAM stand for?',['Random Access Memory','Read Access Memory','Rapid Access Module','Real-time Active Memory'],0,'Volatile computer memory'),
+	qb(5,'easy','Who co-founded Microsoft alongside Bill Gates?',['Paul Allen','Steve Ballmer','Steve Wozniak','Larry Page'],0,'In Albuquerque, 1975'),
+	qb(5,'medium','What year was the first iPhone released?',['2007','2005','2008','2010'],0,'Steve Jobs keynote, Macworld'),
+	qb(5,'medium','What programming language is most used for web frontend?',['JavaScript','Python','Java','C++'],0,'Originally called Mocha'),
+	qb(5,'hard','What does HTTPS stand for?',['HyperText Transfer Protocol Secure','High Tech Transfer Protocol System','Hyper Transfer Protocol Safe','HyperText Transaction Protocol Secure'],0,'Uses SSL/TLS encryption'),
+	qb(5,'hard','Who is often called the first computer programmer?',['Ada Lovelace','Alan Turing','Charles Babbage','Grace Hopper'],0,'Wrote algorithms for the Analytical Engine'),
+	qb(5,'easy','What does PDF stand for?',['Portable Document Format','Print Document File','Page Display Format','Public Data File'],0,'Created by Adobe'),
+	qb(5,'medium','Who created the Linux kernel?',['Linus Torvalds','Richard Stallman','Dennis Ritchie','Ken Thompson'],0,'Finnish software engineer, 1991'),
+	qb(5,'hard','What was IBM\'s chess-playing computer called?',['Deep Blue','Watson','HAL 9000','ENIAC'],0,'Defeated Kasparov in 1997'),
+
+	// ---- 6: Nature (additional) ----
+	qb(6,'easy','What is the largest land animal?',['Elephant','Rhinoceros','Hippopotamus','Giraffe'],0,'African species is the largest'),
+	qb(6,'easy','How many wings does a bee have?',['4','2','6','8'],0,'Two pairs, front and back'),
+	qb(6,'medium','What is the fastest bird in the world?',['Peregrine falcon','Bald eagle','Swift','Albatross'],0,'Dives at over 200 mph'),
+	qb(6,'medium','What is the largest reef system on Earth?',['Great Barrier Reef','Belize Barrier Reef','Red Sea Coral Reef','New Caledonia Reef'],0,'Off Australia\'s coast, 2,300 km'),
+	qb(6,'hard','Which continent has no native reptile species?',['Antarctica','Europe','Australia','North America'],0,'Too cold for cold-blooded animals'),
+	qb(6,'easy','What is a group of fish called?',['School','Pack','Flock','Herd'],0,'Also called a shoal'),
+	qb(6,'medium','Which animal has the largest brain by weight?',['Sperm whale','Elephant','Dolphin','Human'],0,'About 17 pounds'),
+	qb(6,'hard','Which tree species is known for living the longest?',['Bristlecone pine','Giant sequoia','Olive tree','Yew'],0,'Over 5,000 years in California'),
+	qb(6,'hard','What is the deepest-diving marine mammal?',['Cuvier\'s beaked whale','Sperm whale','Elephant seal','Blue whale'],0,'Recorded at nearly 3,000 meters'),
+
+	// ---- 7: Food & Drink (additional) ----
+	qb(7,'easy','What Italian dish is a flatbread with toppings?',['Pizza','Calzone','Focaccia','Bruschetta'],0,'Originated in Naples'),
+	qb(7,'easy','What fruit is traditionally used to make wine?',['Grape','Apple','Pear','Plum'],0,'Vineyards grow them'),
+	qb(7,'medium','Which nut is a key ingredient in classic pesto?',['Pine nut','Walnut','Cashew','Hazelnut'],0,'Also called pignoli'),
+	qb(7,'medium','Kimchi is a traditional dish from which country?',['South Korea','Japan','China','Thailand'],0,'Fermented vegetables, often cabbage'),
+	qb(7,'hard','At approximately what temperature Celsius does sugar caramelize?',['170','100','250','130'],0,'Golden brown transformation'),
+	qb(7,'easy','Which vegetable is known for making people cry when cut?',['Onion','Garlic','Pepper','Radish'],0,'Releases syn-propanethial-S-oxide'),
+	qb(7,'medium','What grain is the primary ingredient in beer?',['Barley','Wheat','Rice','Corn'],0,'Malted before brewing'),
+	qb(7,'hard','Which ancient civilization first consumed chocolate as a drink?',['Aztecs/Maya','Romans','Chinese','Egyptians'],0,'Central America, called xocolatl'),
+	qb(7,'hard','What Japanese cooking method uses deep-frying in light batter?',['Tempura','Teriyaki','Tonkatsu','Yakitori'],0,'Portuguese influence, 16th century'),
+
+	// ---- 8: Arts & Culture (additional) ----
+	qb(8,'easy','What is the art of beautiful handwriting called?',['Calligraphy','Typography','Stenography','Lithography'],0,'From Greek kallos and graphein'),
+	qb(8,'easy','Who wrote A Christmas Carol?',['Charles Dickens','Mark Twain','Jane Austen','Oscar Wilde'],0,'Scrooge and three ghosts'),
+	qb(8,'medium','What art movement did Andy Warhol lead?',['Pop Art','Surrealism','Abstract Expressionism','Minimalism'],0,'Campbell\'s Soup Cans, Marilyn'),
+	qb(8,'medium','In musical terminology, what does "forte" mean?',['Loud','Soft','Fast','Slow'],0,'Abbreviated as f'),
+	qb(8,'hard','Which Greek column order features scrolled capitals?',['Ionic','Doric','Corinthian','Tuscan'],0,'Between simple and ornate'),
+	qb(8,'hard','Who wrote Don Quixote?',['Miguel de Cervantes','Gabriel Garcia Marquez','Jorge Luis Borges','Federico Garcia Lorca'],0,'Published 1605, tilting at windmills'),
+	qb(8,'easy','How many strings does a standard violin have?',['4','5','6','3'],0,'G, D, A, E tuning'),
+	qb(8,'medium','What dance style originated in southern Spain?',['Flamenco','Tango','Samba','Salsa'],0,'Rhythmic stomping and guitar'),
+	qb(8,'hard','What painting technique uses small distinct dots of color?',['Pointillism','Impasto','Chiaroscuro','Sfumato'],0,'Georges Seurat pioneered it'),
+
+	// ---- 9: General Knowledge (additional) ----
+	qb(9,'easy','How many colors are in a rainbow?',['7','6','5','8'],0,'ROY G BIV'),
+	qb(9,'easy','What is the largest planet in our solar system?',['Jupiter','Saturn','Neptune','Uranus'],0,'A gas giant, the Great Red Spot'),
+	qb(9,'medium','What is the study of earthquakes called?',['Seismology','Geology','Volcanology','Tectonics'],0,'Greek seismos means shaking'),
+	qb(9,'medium','How many teeth does an adult human normally have?',['32','28','30','36'],0,'Including wisdom teeth'),
+	qb(9,'hard','Which country has the most UNESCO World Heritage Sites?',['Italy','China','Spain','France'],0,'Over 55 sites'),
+	qb(9,'easy','What is the Roman numeral for 50?',['L','C','D','V'],0,'Between X and C'),
+	qb(9,'medium','What element does the chemical symbol Fe represent?',['Iron','Lead','Fluorine','Francium'],0,'Latin: ferrum'),
+	qb(9,'hard','What is the SI unit of electric current?',['Ampere','Volt','Watt','Ohm'],0,'Named after Andre-Marie Ampere'),
+	qb(9,'hard','What logical fallacy assumes a chain of events from one action?',['Slippery slope','Ad hominem','Straw man','False dilemma'],0,'If A then B then C then catastrophe'),
 ];
 
 
@@ -480,6 +595,8 @@ let speedModeTimer = 60;
 let gameRunning = false;
 let gamePaused = false;
 let gameElapsed = 0;
+let hudBounceTimer = 0;
+let wrongFlashTimer = 0;
 
 // Scene references
 let particleSpeeds: number[] = [];
@@ -701,7 +818,10 @@ function getQuestionsForGame(mode: GameMode, category: number, difficulty: Diffi
 		const rng = mulberry32(getDailySeed());
 		pool = shuffle(pool, rng);
 	} else {
-		pool = shuffle(pool);
+		// Difficulty-based prioritization: matching difficulty first, then others as filler
+		const matching = shuffle(pool.filter(q => q.difficulty === difficulty));
+		const others = shuffle(pool.filter(q => q.difficulty !== difficulty));
+		pool = [...matching, ...others];
 	}
 
 	const count = MODE_QUESTION_COUNT[mode];
@@ -801,6 +921,22 @@ function selectAnswer(idx: number): void {
 
 	gs.totalAnswered++;
 
+	// Visual answer feedback — mark correct/wrong on buttons
+	const da = docs['answers'];
+	if (da) {
+		const btns = ['btn-a', 'btn-b', 'btn-c', 'btn-d'];
+		const labels = ['A', 'B', 'C', 'D'];
+		for (let i = 0; i < 4; i++) {
+			if (gs.eliminated.includes(i)) continue;
+			const btn = da.getElementById(btns[i]) as UIKit.Text;
+			if (i === question.correct) {
+				btn?.setProperties({ text: `[OK] ${labels[i]}) ${question.answers[i]}` });
+			} else if (i === idx && !isCorrect) {
+				btn?.setProperties({ text: `[X] ${labels[i]}) ${question.answers[i]}` });
+			}
+		}
+	}
+
 	if (isCorrect) {
 		gs.correctCount++;
 		gs.combo++;
@@ -810,10 +946,24 @@ function selectAnswer(idx: number): void {
 		const pts = calculateScore(question.difficulty, gs.timer, gs.combo);
 		gs.score += pts;
 		showToastMsg(`+${pts} pts! Combo x${Math.min(gs.combo, 10)}`, 1.2);
+
+		// Visual feedback: HUD bounce
+		hudBounceTimer = 0.3;
+		const hudOv = offsets['hud'];
+		if (hudOv) {
+			hudOv[1] = PANEL_CONFIGS['hud'].y + 0.05;
+		}
 	} else {
 		gs.combo = 0;
 		gs.streak = 0;
 		showToastMsg(`Wrong! Answer: ${question.answers[question.correct]}`, 1.8);
+
+		// Visual feedback: red flash on scene lights
+		wrongFlashTimer = 0.4;
+		for (const l of sceneLights) {
+			l.color.setHex(0xff0000);
+			l.intensity = 1.5;
+		}
 
 		// Streak mode: game over on wrong answer
 		if (gs.mode === 'streak') {
@@ -1027,7 +1177,14 @@ function updateHUD(): void {
 	}
 
 	const md = d.getElementById('lbl-mode') as UIKit.Text;
-	md?.setProperties({ text: gs.mode.toUpperCase() });
+	// Show difficulty and category info alongside mode
+	let modeText = gs.mode.toUpperCase();
+	const diffLabel = gs.difficulty === 'easy' ? 'EASY' : gs.difficulty === 'medium' ? 'MED' : 'HARD';
+	modeText += ` [${diffLabel}]`;
+	if (gs.mode === 'category' && gs.category >= 0) {
+		modeText += ` ${CATEGORIES[gs.category]}`;
+	}
+	md?.setProperties({ text: modeText });
 
 	const st = d.getElementById('lbl-streak') as UIKit.Text;
 	st?.setProperties({ text: `Streak: ${gs.streak}` });
@@ -1343,6 +1500,11 @@ class TriviaSystem extends createSystem({
 					showScreen('difficulty');
 				} });
 			}
+			// Random category option
+			(doc.getElementById('btn-cat-all') as UIKit.Text)?.setProperties({ onClick: () => {
+				this.selectedCategory = Math.floor(Math.random() * 10);
+				showScreen('difficulty');
+			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('modeselect') });
 		});
 
@@ -1571,20 +1733,40 @@ class TriviaSystem extends createSystem({
 
 		// ---- Input ----
 		if (gameRunning && !feedbackShowing) {
-			const kb = (this.world.input as any)?.keyboard;
-			if (kb) {
-				if (kb.getKeyDown('Digit1')) selectAnswer(0);
-				if (kb.getKeyDown('Digit2')) selectAnswer(1);
-				if (kb.getKeyDown('Digit3')) selectAnswer(2);
-				if (kb.getKeyDown('Digit4')) selectAnswer(3);
-				if (kb.getKeyDown('KeyF')) useFiftyFifty();
-				if (kb.getKeyDown('KeyS')) useSkip();
-				if (kb.getKeyDown('KeyH')) useHint();
-				if (kb.getKeyDown('Escape') || kb.getKeyDown('KeyP')) togglePause();
+			const kb = this.world.input.keyboard;
+			if (kb.getKeyDown('Digit1')) selectAnswer(0);
+			if (kb.getKeyDown('Digit2')) selectAnswer(1);
+			if (kb.getKeyDown('Digit3')) selectAnswer(2);
+			if (kb.getKeyDown('Digit4')) selectAnswer(3);
+			if (kb.getKeyDown('KeyF')) useFiftyFifty();
+			if (kb.getKeyDown('KeyS')) useSkip();
+			if (kb.getKeyDown('KeyH')) useHint();
+			if (kb.getKeyDown('Escape') || kb.getKeyDown('KeyP')) togglePause();
+
+			const rightPad = this.world.input.xr.gamepads.right;
+			if (rightPad?.getButtonDown(InputComponent.B_Button)) togglePause();
+		}
+
+		// ---- HUD bounce recovery ----
+		if (hudBounceTimer > 0) {
+			hudBounceTimer -= delta;
+			if (hudBounceTimer <= 0) {
+				const hudOv = offsets['hud'];
+				if (hudOv) {
+					hudOv[1] = PANEL_CONFIGS['hud'].y;
+				}
 			}
-			const xr = (this.world.input as any)?.xr;
-			if (xr) {
-				if (xr.getButtonDown(InputComponent.B_Button)) togglePause();
+		}
+
+		// ---- Wrong answer flash recovery ----
+		if (wrongFlashTimer > 0) {
+			wrongFlashTimer -= delta;
+			if (wrongFlashTimer <= 0) {
+				const theme = THEMES[settingsState.themeIdx];
+				for (const l of sceneLights) {
+					l.color.setHex(theme.primary);
+					l.intensity = 0.5;
+				}
 			}
 		}
 
