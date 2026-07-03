@@ -170,7 +170,7 @@ const PANEL_CONFIGS: Record<string, { config: string; y: number; z: number }> = 
 };
 
 // ============================================================
-// QUESTION BANK — 400 questions (40 per category)
+// QUESTION BANK — 600 questions (60 per category)
 // ============================================================
 
 function qb(c: number, d: 'easy' | 'medium' | 'hard', text: string, a: [string, string, string, string], r: number, h: string): TriviaQuestion {
@@ -186,7 +186,7 @@ const QUESTIONS: TriviaQuestion[] = [
 	qb(0,'easy','What force keeps us on the ground?',['Gravity','Magnetism','Friction','Inertia'],0,'Newton and an apple'),
 	qb(0,'medium','What is the powerhouse of the cell?',['Mitochondria','Nucleus','Ribosome','Golgi body'],0,'Produces ATP energy'),
 	qb(0,'medium','What element has atomic number 79?',['Gold','Silver','Platinum','Copper'],0,'Symbol is Au'),
-	qb(0,'medium','Speed of light in km/s (approx)?',['300,000','150,000','500,000','1,000,000'],0,'About 3 × 10^5'),
+	qb(0,'medium','Speed of light in km/s (approx)?',['300,000','150,000','500,000','1,000,000'],0,'About 3 x 10^5'),
 	qb(0,'medium','Which planet has the most moons?',['Saturn','Jupiter','Uranus','Neptune'],0,'Ringed planet surpassed Jupiter'),
 	qb(0,'medium','What particle has a positive charge?',['Proton','Electron','Neutron','Photon'],0,'Found in the nucleus'),
 	qb(0,'hard','What is the half-life of Carbon-14?',['5,730 years','1,000 years','10,000 years','50,000 years'],0,'Used in radiocarbon dating'),
@@ -1082,7 +1082,7 @@ function sfxSurvivalBonus(): void {
 let lastTickSecond = -1;
 
 // ============================================================
-// ACHIEVEMENTS (50)
+// ACHIEVEMENTS (60)
 // ============================================================
 
 const ACHIEVEMENT_DEFS: AchDef[] = [
@@ -1137,6 +1137,17 @@ const ACHIEVEMENT_DEFS: AchDef[] = [
 	{ name: 'Centurion', desc: 'Answer 1,000 total questions', check: s => s.totalAnswers >= 1000 },
 	{ name: 'Perfectionist', desc: '100% accuracy in 10+ question game', check: (s, g) => g.totalAnswered >= 10 && g.correctCount === g.totalAnswered },
 	{ name: 'XP Hunter', desc: 'Earn 500+ XP in a single game', check: (s, g) => g.xpGained >= 500 },
+	// ---- Round 6: Survival mode achievements ----
+	{ name: 'Survivor', desc: 'Play a Survival game', check: (s, g) => g.mode === 'survival' },
+	{ name: 'Time Lord', desc: 'Survive 60s+ in Survival mode', check: (s, g) => g.mode === 'survival' && g.elapsedTime >= 60 },
+	{ name: 'Clock Breaker', desc: 'Survive 120s+ in Survival mode', check: (s, g) => g.mode === 'survival' && g.elapsedTime >= 120 },
+	{ name: 'Eternal', desc: 'Survive 300s+ in Survival mode', check: (s, g) => g.mode === 'survival' && g.elapsedTime >= 300 },
+	{ name: 'All Modes', desc: 'Play every game mode at least once', check: s => s.gamesPlayed >= 11 },
+	{ name: 'Answer 500', desc: 'Answer 500 total questions', check: s => s.totalAnswers >= 500 },
+	{ name: 'Score 100K', desc: 'Accumulate 100,000 total score', check: s => s.totalScore >= 100000 },
+	{ name: 'Level 50', desc: 'Reach level 50', check: s => s.level >= 50 },
+	{ name: 'Double Down', desc: 'Use both power-ups in one game', check: (s, g) => !g.hasDouble && !g.hasFreeze },
+	{ name: 'Trivia Titan', desc: 'Answer 2,000 total questions', check: s => s.totalAnswers >= 2000 },
 ];
 
 // ============================================================
@@ -1176,7 +1187,7 @@ const defaultStats = (): GameStats => ({
 
 let stats: GameStats = defaultStats();
 let leaderboard: LeaderboardEntry[] = [];
-let unlockedAchievements: boolean[] = new Array(50).fill(false);
+let unlockedAchievements: boolean[] = new Array(60).fill(false);
 let settingsState = { masterVol: 100, sfxVol: 100, musicVol: 100, themeIdx: 0 };
 let achvPage = 0;
 
@@ -1235,6 +1246,7 @@ let sceneLights: PointLight[] = [];
 let floorGrid: GridHelper | null = null;
 let ceilGrid: GridHelper | null = null;
 let sceneRing: Group | null = null;
+let sceneRing2: Group | null = null;
 let orbitingLights: PointLight[] = [];
 
 // Trail particles for combo effects
@@ -1307,9 +1319,9 @@ function loadAchievements(): void {
 		if (raw) {
 			const parsed = JSON.parse(raw);
 			if (Array.isArray(parsed)) {
-				// Expand older saves (40) to 50 gracefully
-				unlockedAchievements = new Array(50).fill(false);
-				for (let i = 0; i < Math.min(parsed.length, 50); i++) {
+				// Expand older saves (40/50) to 60 gracefully
+				unlockedAchievements = new Array(60).fill(false);
+				for (let i = 0; i < Math.min(parsed.length, 60); i++) {
 					unlockedAchievements[i] = !!parsed[i];
 				}
 			}
@@ -1478,6 +1490,7 @@ function showScreen(screen: Screen): void {
 			break;
 		case 'catpick':
 			showPanel('catpick');
+			updateCatPickLabels();
 			break;
 		case 'difficulty':
 			showPanel('difficulty');
@@ -1983,7 +1996,7 @@ function useFiftyFifty(): void {
 		const fifty = da.getElementById('btn-fifty') as UIKit.Text;
 		fifty?.setProperties({ text: '---' });
 	}
-	showToastMsg('50:50 — Two wrong answers removed!', 1.5);
+	showToastMsg('50:50 -- Two wrong answers removed!', 1.5);
 }
 
 function useSkip(): void {
@@ -2025,7 +2038,7 @@ function useDoublePoints(): void {
 	if (!gameRunning || feedbackShowing || !gs.hasDouble) return;
 	gs.hasDouble = false;
 	gs.doublePoints = 3;
-	showToastMsg('DOUBLE POINTS — Next 3 correct = 2x!', 2);
+	showToastMsg('DOUBLE POINTS -- Next 3 correct = 2x!', 2);
 	const da = docs['answers'];
 	if (da) {
 		const btn = da.getElementById('btn-double') as UIKit.Text;
@@ -2037,7 +2050,7 @@ function useTimeFreeze(): void {
 	if (!gameRunning || feedbackShowing || !gs.hasFreeze) return;
 	gs.hasFreeze = false;
 	gs.timeFrozen = true;
-	showToastMsg('TIME FROZEN — Clock paused this question!', 2);
+	showToastMsg('TIME FROZEN -- Clock paused this question!', 2);
 	const da = docs['answers'];
 	if (da) {
 		const btn = da.getElementById('btn-freeze') as UIKit.Text;
@@ -2077,6 +2090,20 @@ function updateTitleLabels(): void {
 	const achvCount = d.getElementById('lbl-achv-count') as UIKit.Text;
 	const unlocked = unlockedAchievements.filter(Boolean).length;
 	achvCount?.setProperties({ text: `Achievements: ${unlocked}/50` });
+}
+
+function updateCatPickLabels(): void {
+	const d = docs['catpick'];
+	if (!d) return;
+	for (let i = 0; i < 10; i++) {
+		const btn = d.getElementById(`btn-cat${i}`) as UIKit.Text;
+		if (!btn) continue;
+		const total = stats.categoryTotal[i] || 0;
+		const correct = stats.categoryCorrect[i] || 0;
+		const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+		const star = total >= 20 && pct >= 80 ? ' [*]' : total > 0 ? ` ${pct}%` : '';
+		btn.setProperties({ text: `${CATEGORIES[i]}${star}` });
+	}
 }
 
 function updateHUD(): void {
@@ -2122,7 +2149,7 @@ function updateHUD(): void {
 
 	const st = d.getElementById('lbl-streak') as UIKit.Text;
 	if (gs.mode === 'endless') {
-		const hearts = gs.lives > 0 ? '\u2764'.repeat(gs.lives) : 'DEAD';
+		const hearts = gs.lives > 0 ? '<3 '.repeat(gs.lives).trim() : 'DEAD';
 		st?.setProperties({ text: `Lives: ${hearts}` });
 	} else if (gs.mode === 'survival') {
 		st?.setProperties({ text: `Clock: ${Math.ceil(gs.survivalTimer)}s` });
@@ -2489,6 +2516,18 @@ function setupScene(): void {
 	sceneRing.position.set(0, 2.5, -3);
 	scene.add(sceneRing);
 
+	// Second ring (perpendicular orbit)
+	const ring2Geo = new TorusGeometry(1.4, 0.03, 12, 36);
+	const ring2Edges = new EdgesGeometry(ring2Geo);
+	const ring2Mat = new LineBasicMaterial({ color: theme.primary, transparent: true, opacity: 0.3 });
+	wireMats.push(ring2Mat);
+	const ring2Lines = new LineSegments(ring2Edges, ring2Mat);
+	sceneRing2 = new Group();
+	sceneRing2.add(ring2Lines);
+	sceneRing2.position.set(0, 2.5, -3);
+	sceneRing2.rotation.x = Math.PI / 2;
+	scene.add(sceneRing2);
+
 	// Orbiting point lights (4)
 	for (let i = 0; i < 4; i++) {
 		const opl = new PointLight(theme.primary, 0.4, 15);
@@ -2741,7 +2780,7 @@ class TriviaSystem extends createSystem({
 			(doc.getElementById('btn-reset') as UIKit.Text)?.setProperties({ onClick: () => {
 				stats = defaultStats();
 				leaderboard = [];
-				unlockedAchievements = new Array(40).fill(false);
+				unlockedAchievements = new Array(60).fill(false);
 				saveStats();
 				saveLeaderboard();
 				saveAchievements();
@@ -2773,6 +2812,10 @@ class TriviaSystem extends createSystem({
 			} });
 			(doc.getElementById('btn-speed-filter') as UIKit.Text)?.setProperties({ onClick: () => {
 				leaderboardFilter = 'speed';
+				updateLeaderboardUI();
+			} });
+			(doc.getElementById('btn-survival-filter') as UIKit.Text)?.setProperties({ onClick: () => {
+				leaderboardFilter = 'survival';
 				updateLeaderboardUI();
 			} });
 			(doc.getElementById('btn-back') as UIKit.Text)?.setProperties({ onClick: () => showScreen('title') });
@@ -3088,6 +3131,11 @@ class TriviaSystem extends createSystem({
 			const ringSpeedMult = streakLevel === 2 ? 3 : streakLevel === 1 ? 2 : 1;
 			sceneRing.rotation.y += 0.15 * delta * ringSpeedMult;
 			sceneRing.rotation.x += 0.05 * delta * ringSpeedMult;
+		}
+		if (sceneRing2) {
+			const ringSpeedMult = streakLevel === 2 ? 3 : streakLevel === 1 ? 2 : 1;
+			sceneRing2.rotation.y += 0.1 * delta * ringSpeedMult;
+			sceneRing2.rotation.z += 0.08 * delta * ringSpeedMult;
 		}
 
 		// ---- Animate orbiting lights ----
